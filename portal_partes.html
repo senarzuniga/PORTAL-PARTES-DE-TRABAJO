@@ -550,6 +550,7 @@ const CATS_DEFECTO=['Ingeniería mecánica','Ingeniería eléctrica','Ingenierí
  'Desplazamientos','Formación','Otros'];
 let state={meta:{version:2,lastSaved:null},trabajadores:[],ofs:[],categorias:[],partes:[]};
 let sesion=null;
+let ultimoAutoRefreshGithub=0;
 
 /* ================= PERSISTENCIA ================= */
 const FSA=('showOpenFilePicker' in window), LS_KEY='ingecart_partes_db_v2', GH_KEY='ingecart_partes_github_v1';
@@ -621,6 +622,18 @@ async function cargarDesdeGithub(){
     return false;
   }catch(err){console.error(err); toast('No se pudo leer GitHub. Se usará la copia local si existe.','err'); return false;}
 }
+async function refrescarDesdeGithubSiProcede(silencioso){
+  const ahora=Date.now();
+  if(ahora-ultimoAutoRefreshGithub<15000)return false;
+  ultimoAutoRefreshGithub=ahora;
+  const ok=await cargarDesdeGithub();
+  if(!ok)return false;
+  try{localStorage.setItem(LS_KEY,JSON.stringify(state,null,2));}catch(e){}
+  rellenarLoginUsers();
+  renderTodo();
+  if(!silencioso)toast('Datos actualizados desde GitHub','ok');
+  return true;
+}
 async function guardarEnGithub(json,silencioso){
   const cfg=ghConfig();
   if(!cfg.token)return false;
@@ -687,7 +700,7 @@ function actualizarEstadoDb(){
   const ls=$('#lastSaved');if(ls)ls.textContent=state.meta.lastSaved?('Último guardado: '+new Date(state.meta.lastSaved).toLocaleString('es-ES')):'Aún no se ha guardado.';
   const av=$('#avisoModo');if(!av)return;
   if(cfg.token){av.className='aviso info';av.innerHTML='GitHub configurado con escritura: los cambios se envían a <code>'+esc(cfg.repo+'/'+cfg.path)+'</code>.';}
-  else{av.className='aviso';av.innerHTML='Sin token GitHub: la app lee la nube, pero guarda solo en este navegador hasta que configures el token.';}
+  else{av.className='aviso';av.innerHTML='Carga automática desde GitHub activa: al abrir la app en cualquier equipo se leerá <code>'+esc(cfg.repo+'/'+cfg.path)+'</code>. Sin token, solo el guardado sigue siendo local en ese navegador.';}
 }
 function refrescarKpis(){
   const set=(id,v)=>{const e=$(id);if(e)e.textContent=v;};
@@ -1049,8 +1062,8 @@ $('#fileImport').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new
   r.onload=async()=>{try{if(!confirm('Importar sustituirá los datos actuales. ¿Continuar?'))return;mezclar(JSON.parse(r.result));await persist(true);rellenarLoginUsers();renderTodo();toast('Datos importados','ok');}catch(err){toast('JSON no válido','err');}};
   r.readAsText(f);e.target.value='';};
 $('#btnNuevoArch').onclick=guardarGhConfig;
-$('#btnAbrirArch').onclick=async()=>{guardarGhConfig();const ok=await cargarDesdeGithub();if(ok){try{localStorage.setItem(LS_KEY,JSON.stringify(state,null,2));}catch(e){} rellenarLoginUsers();renderTodo();toast('Base de datos recargada desde GitHub','ok');}else toast('No se pudo cargar desde GitHub','err'); actualizarEstadoDb();};
-$('#btnReconectar').onclick=async()=>{guardarGhConfig();const ok=await cargarDesdeGithub();actualizarEstadoDb();toast(ok?'Conexión GitHub correcta':'No se pudo validar la conexión GitHub',ok?'ok':'err');};
+$('#btnAbrirArch').onclick=async()=>{guardarGhConfig();ultimoAutoRefreshGithub=0;const ok=await refrescarDesdeGithubSiProcede(false);if(!ok)toast('No se pudo cargar desde GitHub','err');actualizarEstadoDb();};
+$('#btnReconectar').onclick=async()=>{guardarGhConfig();ultimoAutoRefreshGithub=0;const ok=await refrescarDesdeGithubSiProcede(true);actualizarEstadoDb();toast(ok?'Conexión GitHub correcta':'No se pudo validar la conexión GitHub',ok?'ok':'err');};
 $('#btnGuardarAhora').onclick=()=>persist();
 
 /* ================= EDICIÓN DE PARTES ================= */
@@ -1121,7 +1134,7 @@ function renderTodo(){rellenarSelects();renderUltimos();renderTrabajadores();ren
 async function init(){
   let cargado=false;
   cargarGhConfigEnFormulario();
-  cargado=await cargarDesdeGithub();
+  cargado=await refrescarDesdeGithubSiProcede(true);
   if(!cargado&&FSA){try{dbHandle=await idbGet('dbFileHandle');
     if(dbHandle){const p=await dbHandle.queryPermission({mode:'readwrite'});
       if(p==='granted'){await cargarDesdeHandle();cargado=true;}else $('#btnReconectar').style.display='inline-flex';}}
@@ -1135,6 +1148,8 @@ async function init(){
   if(!state.ofs.length)state.ofs=[{id:uid(),codigo:'OF-EJEMPLO',desc:'Proyecto de ejemplo (bórralo)',empresa:'',cliente:'',distribuidor:'',horasPrev:0}];
   rellenarSelects();rellenarLoginUsers();actualizarEstadoDb();refrescarKpis();
   $('#loginOv').style.display='flex';
+  window.addEventListener('focus',()=>{refrescarDesdeGithubSiProcede(true);});
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')refrescarDesdeGithubSiProcede(true);});
 }
 init();
 </script>
