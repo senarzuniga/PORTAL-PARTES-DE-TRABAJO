@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "version": 3,
+    "backend": "github-contents-json",
+    "repository": "senarzuniga/PORTAL-PARTES-DE-TRABAJO",
+    "branch": "main",
+    "db_path": "partes_horas_db.json",
+    "last_saved": "2026-09-01T00:00:00+00:00"
+  },
+  "trabajadores": [
+    {
+      "id": "trab-admin",
+      "nombre": "Administrador",
+      "usuario": "admin",
+      "pinHash": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
+      "rol": "admin"
+    }
+  ],
+  "ofs": [
+    {
+      "id": "of-ejemplo",
+      "codigo": "OF-EJEMPLO",
+      "desc": "Proyecto de ejemplo",
+      "empresa": "IS Backoffice",
+      "cliente": "",
+      "distribuidor": "",
+      "horasPrev": 0.0
+    }
+  ],
+  "categorias": [
+    {"id": "cat-01", "nombre": "Ingeniería mecánica"},
+    {"id": "cat-02", "nombre": "Ingeniería eléctrica"},
+    {"id": "cat-03", "nombre": "Ingeniería de automatización / control"},
+    {"id": "cat-04", "nombre": "Diseño / CAD / Delineación"},
+    {"id": "cat-05", "nombre": "Programación PLC / SCADA / HMI"},
+    {"id": "cat-06", "nombre": "Comercial / Ofertas / Negociación"},
+    {"id": "cat-07", "nombre": "Gestión de proyecto (PM)"},
+    {"id": "cat-08", "nombre": "Compras / Gestión con proveedores"},
+    {"id": "cat-09", "nombre": "Puesta en marcha / Comisionado"},
+    {"id": "cat-10", "nombre": "Montaje / Taller / Fabricación"},
+    {"id": "cat-11", "nombre": "Documentación / Marcado CE / Calidad"},
+    {"id": "cat-12", "nombre": "Reuniones / Coordinación"},
+    {"id": "cat-13", "nombre": "Desplazamientos"},
+    {"id": "cat-14", "nombre": "Formación"},
+    {"id": "cat-15", "nombre": "Otros"}
+  ],
+  "partes": []
+}
