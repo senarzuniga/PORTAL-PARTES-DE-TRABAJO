@@ -11,15 +11,27 @@
     --verde:#2E8B57; --rojo:#C0392B; --azul:#2C5F8A;
     --scada-bg:#0d1215; --scada-pan:#131b1f; --scada-line:#233238; --scada-txt:#cfe0e6;
     --sombra:0 1px 3px rgba(20,20,20,.10),0 1px 2px rgba(20,20,20,.06); --radio:6px;
+    --layout-max:1200px; --compact-scale:1;
   }
   *{box-sizing:border-box}
-  html,body{margin:0;padding:0}
+  html,body{margin:0;padding:0;scroll-behavior:smooth}
   body{font-family:"Segoe UI",Roboto,-apple-system,BlinkMacSystemFont,Arial,sans-serif;
     background:var(--gris-fondo);color:var(--negro);font-size:14px;line-height:1.45}
 
+  @media(min-width:820px){
+    :root{--layout-max:1440px;--compact-scale:.92}
+    body{zoom:var(--compact-scale)}
+    nav.tabs{position:sticky;top:0;z-index:180;box-shadow:0 2px 10px rgba(0,0,0,.18)}
+    main{padding-top:16px;padding-bottom:36px}
+    .card{margin-bottom:16px}
+  }
+  @media(min-width:1400px){
+    :root{--layout-max:1540px;--compact-scale:.86}
+  }
+
   /* Cabecera */
   header.app{background:var(--negro);color:#fff;border-bottom:3px solid var(--naranja)}
-  .app-bar{max-width:1200px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .app-bar{max-width:var(--layout-max);margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
   .marca{display:flex;flex-direction:column;line-height:1}
   .marca .logo{font-weight:800;font-size:24px;letter-spacing:-.5px}
   .brand-logo{height:42px;width:auto;display:block}
@@ -42,14 +54,14 @@
   .btn-logout:hover{background:#2a2a2a}
 
   nav.tabs{background:var(--negro-2);border-bottom:1px solid #000}
-  .tabs-inner{max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap}
+  .tabs-inner{max-width:var(--layout-max);margin:0 auto;display:flex;flex-wrap:wrap}
   .tab{color:#c7cbcf;background:none;border:none;cursor:pointer;padding:12px 20px;font-size:13.5px;
     font-weight:600;letter-spacing:.2px;border-bottom:3px solid transparent;font-family:inherit}
   .tab:hover{color:#fff;background:rgba(255,255,255,.04)}
   .tab.active{color:#fff;border-bottom-color:var(--naranja);background:rgba(232,83,27,.10)}
   .tab.hidden{display:none}
 
-  main{max-width:1200px;margin:0 auto;padding:22px 20px 60px}
+  main{max-width:var(--layout-max);margin:0 auto;padding:22px 20px 60px}
   .panel{display:none}.panel.active{display:block}
 
   .card{background:var(--blanco);border:1px solid var(--gris-linea);border-radius:var(--radio);
