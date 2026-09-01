@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": 3,
-    "lastSaved": "2026-09-01T15:41:01.667Z",
+    "lastSaved": "2026-09-01T19:47:19.366Z",
     "backend": "github-contents-json",
     "repository": "senarzuniga/PORTAL-PARTES-DE-TRABAJO",
     "branch": "main",
@@ -154,6 +154,16 @@
       "horas": 6,
       "obs": "",
       "creado": "2026-09-01T15:41:01.666Z"
+    },
+    {
+      "id": "mtj2won8nuxeh",
+      "fecha": "2026-09-01",
+      "trabId": "trab-admin",
+      "ofId": "of-ejemplo",
+      "catId": "cat-01",
+      "horas": 4,
+      "obs": "Diseño de pieza",
+      "creado": "2026-09-01T19:47:19.364Z"
     }
   ]
 }
