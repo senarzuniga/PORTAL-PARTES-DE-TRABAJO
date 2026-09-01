@@ -1134,9 +1134,7 @@ function construirHtmlInforme({o,of,rango,presup,caj,total,dias,filas,porTrab,ca
   <style>@page{size:A4;margin:14mm}*{box-sizing:border-box}body{font-family:"Segoe UI",Arial,sans-serif;color:#161616;font-size:12px;margin:0}
   .pdf-head{width:100%;border-collapse:collapse;margin-bottom:16px;border:1px solid #d6dadf}
   .pdf-head td{border:none;padding:0;vertical-align:middle}
-  .pdf-head .logo-cell{width:220px;background:#161616;padding:16px 18px;border-right:4px solid #E8531B}
-  .pdf-head .logo-cell img{display:block;max-width:170px;max-height:44px;width:auto;height:auto}
-  .pdf-head .title-cell{padding:14px 18px;background:#f7f8f9}
+  .pdf-head .title-cell{padding:16px 18px;background:#f7f8f9;border-left:4px solid #E8531B}
   .pdf-head .eyebrow{font-size:10.5px;text-transform:uppercase;letter-spacing:.7px;color:#5A626B;margin-bottom:3px}
   .pdf-head h1{font-size:18px;line-height:1.2;margin:0;color:#161616}
   .pdf-head p{margin:4px 0 0;font-size:11px;color:#5A626B}
@@ -1145,7 +1143,7 @@ function construirHtmlInforme({o,of,rango,presup,caj,total,dias,filas,porTrab,ca
   th{background:#f2f2f2}.caj td:first-child{background:#faf6f0;font-weight:600;width:38%}.r{text-align:right}
   .tot{background:#fff1e8;font-weight:800}.kpis{display:flex;gap:10px;margin:10px 0}.kpi{border:1px solid #ccc;border-left:4px solid #E8531B;padding:8px 12px;flex:1}.kpi b{font-size:18px;display:block}
   .foot{margin-top:16px;border-top:1px solid #ccc;padding-top:8px;font-size:10.5px;color:#666;text-align:center}</style></head><body>
-  <table class="pdf-head" role="presentation"><tr><td class="logo-cell"><img src="${LOGO_URI}" alt="INGECART"></td><td class="title-cell"><div class="eyebrow">INGECART · Engineering &amp; Auditing</div><h1>Informe de horas por OF</h1><p>Resumen imprimible de dedicación, categorías y detalle de partes</p></td></tr></table>
+  <table class="pdf-head" role="presentation"><tr><td class="title-cell"><div class="eyebrow">INGECART · Engineering &amp; Auditing</div><h1>Informe de horas por OF</h1><p>Resumen imprimible de dedicación, categorías y detalle de partes</p></td></tr></table>
   <h2>Datos del proyecto</h2><table class="caj">${caj}<tr><td>Periodo</td><td>${rango}</td></tr>${presup}<tr><td>Generado</td><td>${new Date().toLocaleString('es-ES')} · por ${esc(sesion?sesion.nombre:'')}</td></tr></table>
   <div class="kpis"><div class="kpi">Horas totales<b>${numES(total)}</b></div><div class="kpi">Días<b>${dias.length}</b></div><div class="kpi">Partes<b>${filas.length}</b></div><div class="kpi">Trabajadores<b>${Object.keys(porTrab).length}</b></div></div>
   <h2>Horas por categoría</h2><table><thead><tr><th>Categoría</th><th class="r">Horas</th><th class="r">%</th></tr></thead><tbody>${catRows}<tr class="tot"><td>Total</td><td class="r">${numES(total)}</td><td class="r">100%</td></tr></tbody></table>
