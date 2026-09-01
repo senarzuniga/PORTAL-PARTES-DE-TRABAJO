@@ -980,7 +980,23 @@ $('#btnAddTrab').onclick=async()=>{
   $('#nt-nombre').value='';$('#nt-user').value='';$('#nt-pin').value='';
   await persist(true);renderTrabajadores();rellenarLoginUsers();toast('Usuario añadido','ok');
 };
-async function cambiarPin(id){const t=trabPorId(id);const p=prompt('Nuevo PIN para '+t.nombre+':');if(p&&p.trim()){t.pinHash=await hashPin(p.trim());await persist(true);renderTrabajadores();rellenarLoginUsers();toast('PIN actualizado','ok');}}
+async function cambiarPin(id){
+  const t=trabPorId(id);
+  if(!t.id)return;
+  if(t.pinHash){
+    const actual=prompt('PIN actual de '+t.nombre+':');
+    if(actual===null)return;
+    if(await hashPin(actual.trim())!==t.pinHash){toast('PIN actual incorrecto','err');return;}
+  }
+  const nuevo=prompt('Nuevo PIN para '+t.nombre+':');
+  if(nuevo===null)return;
+  if(!nuevo.trim()){toast('El PIN no puede estar vacío','err');return;}
+  const conf=prompt('Repite el nuevo PIN para '+t.nombre+':');
+  if(conf===null)return;
+  if(nuevo.trim()!==conf.trim()){toast('Los PIN no coinciden','err');return;}
+  t.pinHash=await hashPin(nuevo.trim());
+  await persist(true);renderTrabajadores();rellenarLoginUsers();toast('PIN actualizado','ok');
+}
 async function cambiarRol(id){const t=trabPorId(id);t.rol=t.rol==='admin'?'trabajador':'admin';await persist(true);renderTrabajadores();toast('Rol: '+t.rol,'ok');}
 async function eliminarTrab(id){
   if(sesion&&id===sesion.id)return toast('No puedes eliminar tu propia sesión','err');
