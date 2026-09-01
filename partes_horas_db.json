@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": 3,
-    "lastSaved": "2026-09-01T11:40:53.709Z",
+    "lastSaved": "2026-09-01T11:41:03.608Z",
     "backend": "github-contents-json",
     "repository": "senarzuniga/PORTAL-PARTES-DE-TRABAJO",
     "branch": "main",
@@ -100,6 +100,16 @@
       "horas": 8,
       "obs": "",
       "creado": "2026-09-01T11:40:53.709Z"
+    },
+    {
+      "id": "mtiljchkstmt2",
+      "fecha": "2026-09-01",
+      "trabId": "trab-admin",
+      "ofId": "of-ejemplo",
+      "catId": "cat-03",
+      "horas": 4,
+      "obs": "",
+      "creado": "2026-09-01T11:41:03.608Z"
     }
   ]
 }
