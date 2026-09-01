@@ -551,6 +551,22 @@ const CATS_DEFECTO=['Ingeniería mecánica','Ingeniería eléctrica','Ingenierí
 let state={meta:{version:2,lastSaved:null},trabajadores:[],ofs:[],categorias:[],partes:[]};
 let sesion=null;
 let ultimoAutoRefreshGithub=0;
+function esAdminBase(t){return !!t&&(t.id==='trab-admin'||(t.usuario||'').trim().toLowerCase()==='admin');}
+async function asegurarAdminBase(){
+  let admin=state.trabajadores.find(esAdminBase);
+  if(!admin){
+    admin={id:'trab-admin',nombre:'Administrador',usuario:'admin',pinHash:await hashPin('1234'),rol:'admin'};
+    state.trabajadores.unshift(admin);
+    return true;
+  }
+  let cambiado=false;
+  if(admin.id!=='trab-admin'){admin.id='trab-admin';cambiado=true;}
+  if((admin.usuario||'').trim().toLowerCase()!=='admin'){admin.usuario='admin';cambiado=true;}
+  if(admin.nombre!=='Administrador'){admin.nombre='Administrador';cambiado=true;}
+  if(admin.rol!=='admin'){admin.rol='admin';cambiado=true;}
+  if(!admin.pinHash){admin.pinHash=await hashPin('1234');cambiado=true;}
+  return cambiado;
+}
 
 /* ================= PERSISTENCIA ================= */
 const FSA=('showOpenFilePicker' in window), LS_KEY='ingecart_partes_db_v2', GH_KEY='ingecart_partes_github_v1';
@@ -997,8 +1013,13 @@ async function cambiarPin(id){
   t.pinHash=await hashPin(nuevo.trim());
   await persist(true);renderTrabajadores();rellenarLoginUsers();toast('PIN actualizado','ok');
 }
-async function cambiarRol(id){const t=trabPorId(id);t.rol=t.rol==='admin'?'trabajador':'admin';await persist(true);renderTrabajadores();toast('Rol: '+t.rol,'ok');}
+async function cambiarRol(id){
+  const t=trabPorId(id);
+  if(esAdminBase(t))return toast('El usuario admin mantiene siempre permisos de administrador','err');
+  t.rol=t.rol==='admin'?'trabajador':'admin';await persist(true);renderTrabajadores();toast('Rol: '+t.rol,'ok');
+}
 async function eliminarTrab(id){
+  if(esAdminBase(trabPorId(id)))return toast('No puedes eliminar el usuario admin principal','err');
   if(sesion&&id===sesion.id)return toast('No puedes eliminar tu propia sesión','err');
   const n=partesDe(id).length;
   if(n&&!confirm(`Tiene ${n} partes. Quedarán sin nombre. ¿Eliminar?`))return; else if(!n&&!confirm('¿Eliminar usuario?'))return;
@@ -1158,9 +1179,11 @@ async function init(){
   if(!cargado)cargado=cargarLocal();
   if(!state.categorias.length)state.categorias=CATS_DEFECTO.map(c=>({id:uid(),nombre:c}));
   // asegurar admin
+  const adminNormalizado=await asegurarAdminBase();
   const hayAdmin=state.trabajadores.some(t=>t.rol==='admin'&&t.pinHash);
   if(!hayAdmin){state.trabajadores.push({id:uid(),nombre:'Administrador',usuario:'admin',pinHash:await hashPin('1234'),rol:'admin'});
     try{localStorage.setItem(LS_KEY,JSON.stringify(state,null,2));}catch(e){}}
+  else if(adminNormalizado){try{localStorage.setItem(LS_KEY,JSON.stringify(state,null,2));}catch(e){}}
   if(!state.ofs.length)state.ofs=[{id:uid(),codigo:'OF-EJEMPLO',desc:'Proyecto de ejemplo (bórralo)',empresa:'',cliente:'',distribuidor:'',horasPrev:0}];
   rellenarSelects();rellenarLoginUsers();actualizarEstadoDb();refrescarKpis();
   $('#loginOv').style.display='flex';

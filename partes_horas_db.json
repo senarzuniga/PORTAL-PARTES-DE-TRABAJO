@@ -1,7 +1,6 @@
 {
   "meta": {
     "version": 3,
-    "lastSaved": "2026-09-01T11:44:47.436Z",
     "backend": "github-contents-json",
     "repository": "senarzuniga/PORTAL-PARTES-DE-TRABAJO",
     "branch": "main",
@@ -14,7 +13,7 @@
       "nombre": "Administrador",
       "usuario": "admin",
       "pinHash": "36e836f896ac1e8deaae0445bf367fa43b846cda95050db066decddf82540410",
-      "rol": "trabajador"
+      "rol": "admin"
     }
   ],
   "ofs": [
@@ -25,81 +24,25 @@
       "empresa": "IS Backoffice",
       "cliente": "",
       "distribuidor": "",
-      "horasPrev": 0
+      "horasPrev": 0.0
     }
   ],
   "categorias": [
-    {
-      "id": "cat-01",
-      "nombre": "Ingeniería mecánica"
-    },
-    {
-      "id": "cat-02",
-      "nombre": "Ingeniería eléctrica"
-    },
-    {
-      "id": "cat-03",
-      "nombre": "Ingeniería de automatización / control"
-    },
-    {
-      "id": "cat-04",
-      "nombre": "Diseño / CAD / Delineación"
-    },
-    {
-      "id": "cat-05",
-      "nombre": "Programación PLC / SCADA / HMI"
-    },
-    {
-      "id": "cat-06",
-      "nombre": "Comercial / Ofertas / Negociación"
-    },
-    {
-      "id": "cat-07",
-      "nombre": "Gestión de proyecto (PM)"
-    },
-    {
-      "id": "cat-08",
-      "nombre": "Compras / Gestión con proveedores"
-    },
-    {
-      "id": "cat-09",
-      "nombre": "Puesta en marcha / Comisionado"
-    },
-    {
-      "id": "cat-10",
-      "nombre": "Montaje / Taller / Fabricación"
-    },
-    {
-      "id": "cat-11",
-      "nombre": "Documentación / Marcado CE / Calidad"
-    },
-    {
-      "id": "cat-12",
-      "nombre": "Reuniones / Coordinación"
-    },
-    {
-      "id": "cat-13",
-      "nombre": "Desplazamientos"
-    },
-    {
-      "id": "cat-14",
-      "nombre": "Formación"
-    },
-    {
-      "id": "cat-15",
-      "nombre": "Otros"
-    }
+    {"id": "cat-01", "nombre": "Ingeniería mecánica"},
+    {"id": "cat-02", "nombre": "Ingeniería eléctrica"},
+    {"id": "cat-03", "nombre": "Ingeniería de automatización / control"},
+    {"id": "cat-04", "nombre": "Diseño / CAD / Delineación"},
+    {"id": "cat-05", "nombre": "Programación PLC / SCADA / HMI"},
+    {"id": "cat-06", "nombre": "Comercial / Ofertas / Negociación"},
+    {"id": "cat-07", "nombre": "Gestión de proyecto (PM)"},
+    {"id": "cat-08", "nombre": "Compras / Gestión con proveedores"},
+    {"id": "cat-09", "nombre": "Puesta en marcha / Comisionado"},
+    {"id": "cat-10", "nombre": "Montaje / Taller / Fabricación"},
+    {"id": "cat-11", "nombre": "Documentación / Marcado CE / Calidad"},
+    {"id": "cat-12", "nombre": "Reuniones / Coordinación"},
+    {"id": "cat-13", "nombre": "Desplazamientos"},
+    {"id": "cat-14", "nombre": "Formación"},
+    {"id": "cat-15", "nombre": "Otros"}
   ],
-  "partes": [
-    {
-      "id": "mtiljchkstmt2",
-      "fecha": "2026-09-01",
-      "trabId": "trab-admin",
-      "ofId": "of-ejemplo",
-      "catId": "cat-03",
-      "horas": 4,
-      "obs": "",
-      "creado": "2026-09-01T11:41:03.608Z"
-    }
-  ]
+  "partes": []
 }
