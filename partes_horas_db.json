@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": 3,
-    "lastSaved": "2026-09-01T19:47:19.366Z",
+    "lastSaved": "2026-09-01T19:53:18.331Z",
     "backend": "github-contents-json",
     "repository": "senarzuniga/PORTAL-PARTES-DE-TRABAJO",
     "branch": "main",
@@ -40,6 +40,15 @@
       "cliente": "",
       "distribuidor": "",
       "horasPrev": 0
+    },
+    {
+      "id": "mtj34dmiygdxc",
+      "codigo": "PROYECTO-18",
+      "desc": "AMR",
+      "empresa": "IP",
+      "cliente": "International paper",
+      "distribuidor": "",
+      "horasPrev": 1000
     }
   ],
   "categorias": [
