@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": 3,
-    "lastSaved": "2026-09-01T12:10:49.674Z",
+    "lastSaved": "2026-09-01T12:10:59.129Z",
     "backend": "github-contents-json",
     "repository": "senarzuniga/PORTAL-PARTES-DE-TRABAJO",
     "branch": "main",
@@ -15,13 +15,6 @@
       "usuario": "admin",
       "pinHash": "36e836f896ac1e8deaae0445bf367fa43b846cda95050db066decddf82540410",
       "rol": "admin"
-    },
-    {
-      "id": "mtimla0bhw3gm",
-      "nombre": "JoseMaria",
-      "usuario": "JoseMaria",
-      "pinHash": "36e836f896ac1e8deaae0445bf367fa43b846cda95050db066decddf82540410",
-      "rol": "trabajador"
     }
   ],
   "ofs": [
