@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": 3,
-    "lastSaved": "2026-09-02T08:07:43.629Z",
+    "lastSaved": "2026-09-02T09:53:19.737Z",
     "backend": "github-contents-json",
     "repository": "senarzuniga/PORTAL-PARTES-DE-TRABAJO",
     "branch": "main",
@@ -27,13 +27,6 @@
       "id": "mtimsivdc40cw",
       "nombre": "Jordi Ortiz",
       "usuario": "Departamento de ingenieria",
-      "pinHash": "36e836f896ac1e8deaae0445bf367fa43b846cda95050db066decddf82540410",
-      "rol": "trabajador"
-    },
-    {
-      "id": "mtjs01ipzwl1o",
-      "nombre": "Andrea Tapia",
-      "usuario": "Project management",
       "pinHash": "36e836f896ac1e8deaae0445bf367fa43b846cda95050db066decddf82540410",
       "rol": "trabajador"
     },
