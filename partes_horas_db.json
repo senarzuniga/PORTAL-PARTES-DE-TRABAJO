@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": 3,
-    "lastSaved": "2026-09-02T07:46:41.207Z",
+    "lastSaved": "2026-09-02T07:46:56.319Z",
     "backend": "github-contents-json",
     "repository": "senarzuniga/PORTAL-PARTES-DE-TRABAJO",
     "branch": "main",
@@ -11,7 +11,7 @@
   "trabajadores": [
     {
       "id": "trab-admin",
-      "nombre": "Administrador",
+      "nombre": "Monica Allue",
       "usuario": "admin",
       "pinHash": "36e836f896ac1e8deaae0445bf367fa43b846cda95050db066decddf82540410",
       "rol": "admin"
