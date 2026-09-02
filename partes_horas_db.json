@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": 3,
-    "lastSaved": "2026-09-02T07:28:17.722Z",
+    "lastSaved": "2026-09-02T07:29:46.418Z",
     "backend": "github-contents-json",
     "repository": "senarzuniga/PORTAL-PARTES-DE-TRABAJO",
     "branch": "main",
@@ -29,6 +29,13 @@
       "usuario": "Jordi Ortiz",
       "pinHash": "36e836f896ac1e8deaae0445bf367fa43b846cda95050db066decddf82540410",
       "rol": "trabajador"
+    },
+    {
+      "id": "mtjs01ipzwl1o",
+      "nombre": "Andrea Tapia",
+      "usuario": "A.tapia",
+      "pinHash": "36e836f896ac1e8deaae0445bf367fa43b846cda95050db066decddf82540410",
+      "rol": "admin"
     }
   ],
   "ofs": [
