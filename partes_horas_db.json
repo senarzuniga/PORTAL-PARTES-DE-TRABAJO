@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": 3,
-    "lastSaved": "2026-09-02T07:29:46.418Z",
+    "lastSaved": "2026-09-02T07:46:06.903Z",
     "backend": "github-contents-json",
     "repository": "senarzuniga/PORTAL-PARTES-DE-TRABAJO",
     "branch": "main",
@@ -33,7 +33,7 @@
     {
       "id": "mtjs01ipzwl1o",
       "nombre": "Andrea Tapia",
-      "usuario": "A.tapia",
+      "usuario": "Project management",
       "pinHash": "36e836f896ac1e8deaae0445bf367fa43b846cda95050db066decddf82540410",
       "rol": "admin"
     }
