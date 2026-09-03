@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": 3,
-    "lastSaved": "2026-09-02T11:23:21.613Z",
+    "lastSaved": "2026-09-03T10:59:56.619Z",
     "backend": "github-contents-json",
     "repository": "senarzuniga/PORTAL-PARTES-DE-TRABAJO",
     "branch": "main",
@@ -13,7 +13,7 @@
       "id": "trab-admin",
       "nombre": "Administrador",
       "usuario": "admin",
-      "pinHash": "36e836f896ac1e8deaae0445bf367fa43b846cda95050db066decddf82540410",
+      "pinHash": "pbkdf2$150000$34ba22bef70340f29d3e2b6441bf1daa$322365adaab185320621eed4cf1691d68e206e8d59d527e808a0f38f92ecc83a",
       "rol": "admin"
     },
     {
