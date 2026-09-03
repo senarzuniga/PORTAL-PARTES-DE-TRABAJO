@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": 3,
-    "lastSaved": "2026-09-03T11:00:15.156Z",
+    "lastSaved": "2026-09-03T11:01:32.956Z",
     "backend": "github-contents-json",
     "repository": "senarzuniga/PORTAL-PARTES-DE-TRABAJO",
     "branch": "main",
@@ -34,7 +34,7 @@
       "id": "mtjtcumluqxhk",
       "nombre": "Gerard González",
       "usuario": "G.gonzález",
-      "pinHash": "2ba481a87f1ea3206576c9aad2e98eb1bd950bf97805e460d50685fd72c3656f",
+      "pinHash": "pbkdf2$150000$e845d7701dd22bb9739ace6e56731576$04aee253c4b50487180b20557b85dafb73e9605a31a4240627261797ebf7a99f",
       "rol": "developer"
     },
     {
