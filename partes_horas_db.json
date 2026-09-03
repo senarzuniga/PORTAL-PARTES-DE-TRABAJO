@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": 3,
-    "lastSaved": "2026-09-02T09:54:08.814Z",
+    "lastSaved": "2026-09-03T11:42:56.522Z",
     "backend": "github-contents-json",
     "repository": "senarzuniga/PORTAL-PARTES-DE-TRABAJO",
     "branch": "main",
@@ -13,14 +13,14 @@
       "id": "trab-admin",
       "nombre": "Administrador",
       "usuario": "admin",
-      "pinHash": "36e836f896ac1e8deaae0445bf367fa43b846cda95050db066decddf82540410",
+      "pinHash": "pbkdf2$150000$4cc691ff6753eddb8596288507265ac4$16817b219b535c51f6149d8562b1487f2bc24d8cf95b5f558eb7bdf1fd4ddf6f",
       "rol": "admin"
     },
     {
       "id": "mtimrztbhieq9",
       "nombre": "Josemaria",
       "usuario": "Director de ingenieria",
-      "pinHash": "36e836f896ac1e8deaae0445bf367fa43b846cda95050db066decddf82540410",
+      "pinHash": "pbkdf2$150000$d30440da5840f4f84419c54bf9bb6749$799b344185a9d535877be56f3102ce0093a83e32f88fba525c556e532377364d",
       "rol": "trabajador"
     },
     {
@@ -34,7 +34,7 @@
       "id": "mtjtcumluqxhk",
       "nombre": "Gerard González",
       "usuario": "G.gonzález",
-      "pinHash": "2ba481a87f1ea3206576c9aad2e98eb1bd950bf97805e460d50685fd72c3656f",
+      "pinHash": "pbkdf2$150000$e845d7701dd22bb9739ace6e56731576$04aee253c4b50487180b20557b85dafb73e9605a31a4240627261797ebf7a99f",
       "rol": "developer"
     },
     {
@@ -177,6 +177,46 @@
       "horas": 4,
       "obs": "Diseño de pieza",
       "creado": "2026-09-01T19:47:19.364Z"
+    },
+    {
+      "id": "mtjymxrpgv1uv",
+      "fecha": "2026-09-02",
+      "trabId": "trab-admin",
+      "ofId": "of-ejemplo",
+      "catId": "cat-01",
+      "horas": 8,
+      "obs": "",
+      "creado": "2026-09-02T10:35:32.341Z"
+    },
+    {
+      "id": "mtk0bua08v36g",
+      "fecha": "2026-09-02",
+      "trabId": "trab-admin",
+      "ofId": "mtj34dmiygdxc",
+      "catId": "cat-01",
+      "horas": 4,
+      "obs": "",
+      "creado": "2026-09-02T11:22:53.832Z"
+    },
+    {
+      "id": "mtk0cfpp8kvg2",
+      "fecha": "2026-09-02",
+      "trabId": "trab-admin",
+      "ofId": "mtj34dmiygdxc",
+      "catId": "cat-01",
+      "horas": 8,
+      "obs": "",
+      "creado": "2026-09-02T11:23:21.613Z"
+    },
+    {
+      "id": "mtlgefa4mn99r",
+      "fecha": "2026-09-03",
+      "trabId": "mtjtcumluqxhk",
+      "ofId": "mtj34dmiygdxc",
+      "catId": "cat-08",
+      "horas": 4,
+      "obs": "",
+      "creado": "2026-09-03T11:40:34.396Z"
     }
   ]
 }
