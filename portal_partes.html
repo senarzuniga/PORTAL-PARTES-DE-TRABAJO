@@ -50,6 +50,11 @@
   .dot{width:9px;height:9px;border-radius:50%;background:#777;display:inline-block}
   .dot.on{background:#39c46b;box-shadow:0 0 0 3px rgba(57,196,107,.2)}
   .dot.local{background:#f0a52a;box-shadow:0 0 0 3px rgba(240,165,42,.2)}
+  .dot.live{background:var(--verde);position:relative}
+  .dot.live::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:2px solid var(--verde);
+    opacity:.7;animation:liveping 1.8s ease-out infinite}
+  @keyframes liveping{0%{transform:scale(.6);opacity:.7}100%{transform:scale(2.1);opacity:0}}
+  #badgeActualizado.pulse{display:inline-block;animation:tagPulse .5s ease}
   .btn-logout{background:none;border:1px solid #444;color:#ddd;border-radius:5px;padding:6px 12px;
     cursor:pointer;font-family:inherit;font-size:12px}
   .btn-logout:hover{background:#2a2a2a}
@@ -57,13 +62,15 @@
   nav.tabs{background:var(--negro-2);border-bottom:1px solid #000}
   .tabs-inner{max-width:var(--layout-max);margin:0 auto;display:flex;flex-wrap:wrap}
   .tab{color:#c7cbcf;background:none;border:none;cursor:pointer;padding:12px 20px;font-size:13.5px;
-    font-weight:600;letter-spacing:.2px;border-bottom:3px solid transparent;font-family:inherit}
+    font-weight:600;letter-spacing:.2px;border-bottom:3px solid transparent;font-family:inherit;
+    transition:color .15s,background .15s,border-color .2s}
   .tab:hover{color:#fff;background:rgba(255,255,255,.04)}
   .tab.active{color:#fff;border-bottom-color:var(--naranja);background:rgba(232,83,27,.10)}
   .tab.hidden{display:none}
 
   main{max-width:var(--layout-max);margin:0 auto;padding:22px 20px 60px}
-  .panel{display:none}.panel.active{display:block}
+  .panel{display:none}.panel.active{display:block;animation:panelIn .3s ease}
+  @keyframes panelIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
   .card{background:var(--blanco);border:1px solid var(--gris-linea);border-radius:var(--radio);
     box-shadow:var(--sombra);margin-bottom:20px}
@@ -88,13 +95,22 @@
     font-weight:600;color:var(--negro)}
 
   .btn{font-family:inherit;font-size:13.5px;font-weight:600;cursor:pointer;border:1px solid transparent;
-    border-radius:5px;padding:9px 18px;display:inline-flex;align-items:center;gap:7px;transition:background .12s}
+    border-radius:5px;padding:9px 18px;display:inline-flex;align-items:center;gap:7px;
+    transition:background .12s,transform .12s,box-shadow .12s;transform:translateY(0)}
+  .btn:hover{transform:translateY(-1px)}
+  .btn:active{transform:translateY(0) scale(.96)}
   .btn-primary{background:var(--naranja);color:#fff}.btn-primary:hover{background:var(--naranja-osc)}
   .btn-dark{background:var(--negro);color:#fff}.btn-dark:hover{background:#000}
   .btn-ghost{background:#fff;color:var(--negro);border-color:var(--gris-linea)}.btn-ghost:hover{background:#f4f5f6}
   .btn-danger{background:#fff;color:var(--rojo);border-color:#e6bcb7}.btn-danger:hover{background:#fbeeec}
   .btn-sm{padding:5px 11px;font-size:12px}
   .btn:disabled{opacity:.45;cursor:not-allowed}
+  .btn:disabled:hover{transform:none}
+  .btn.is-loading{color:transparent!important;pointer-events:none;position:relative}
+  .btn.is-loading::after{content:'';position:absolute;left:50%;top:50%;width:15px;height:15px;margin:-8px 0 0 -8px;
+    border-radius:50%;border:2px solid rgba(255,255,255,.55);border-top-color:#fff;animation:btnspin .6s linear infinite}
+  .btn-ghost.is-loading::after,.btn-danger.is-loading::after{border-color:rgba(22,22,22,.2);border-top-color:var(--negro)}
+  @keyframes btnspin{to{transform:rotate(360deg)}}
   .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
   .btn-lg{padding:13px 28px;font-size:15px}
 
@@ -105,6 +121,8 @@
   td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
   .tabla-wrap{overflow-x:auto}
   .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11.5px;font-weight:600}
+  .tag.pulse{animation:tagPulse .5s ease}
+  @keyframes tagPulse{0%{transform:scale(1)}40%{transform:scale(1.1)}100%{transform:scale(1)}}
   .tag-cat{background:#eef2f6;color:var(--azul)}
   .tag-rol{background:#161616;color:#fff}.tag-rol.tr{background:#eef2f6;color:var(--gris-txt)}
   .pill-obs{color:var(--gris-txt);font-size:12.5px}
@@ -129,14 +147,17 @@
   /* Botonera de horas */
   .horas-pad{display:flex;align-items:stretch;gap:8px}
   .horas-btn{width:46px;font-size:22px;font-weight:800;line-height:1;background:var(--negro);color:#fff;
-    border:none;border-radius:6px;cursor:pointer}
+    border:none;border-radius:6px;cursor:pointer;transition:background .12s,transform .12s}
   .horas-btn:hover{background:#000}
-  .horas-btn:active{transform:translateY(1px)}
-  #p-horas{text-align:center;font-size:20px;font-weight:800;font-variant-numeric:tabular-nums}
+  .horas-btn:active{transform:translateY(1px) scale(.94)}
+  #p-horas{text-align:center;font-size:20px;font-weight:800;font-variant-numeric:tabular-nums;transition:transform .12s}
+  #p-horas.bump{animation:bump .18s ease}
+  @keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.08)}100%{transform:scale(1)}}
   .quick{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
   .chip{background:#fff;border:1px solid var(--gris-linea);border-radius:20px;padding:5px 13px;font-size:12.5px;
-    font-weight:600;cursor:pointer;color:var(--negro)}
+    font-weight:600;cursor:pointer;color:var(--negro);transition:border-color .12s,color .12s,transform .12s}
   .chip:hover{border-color:var(--naranja);color:var(--naranja-osc)}
+  .chip:active{transform:scale(.92)}
   .chip.clear{color:var(--rojo);border-color:#e6bcb7}
 
   /* Aviso grande de validación */
@@ -203,6 +224,9 @@
   .login-body{padding:22px}
   .login-body h2{margin:0 0 4px;font-size:16px}
   .login-body p{margin:0 0 18px;font-size:12.5px;color:var(--gris-txt)}
+  .login-remember{display:grid;grid-template-columns:1fr;gap:6px;margin-top:12px}
+  .login-remember label{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--gris-txt);cursor:pointer}
+  .login-remember input{width:auto}
   .login-err{display:none;background:#fdecea;color:var(--rojo);border-radius:5px;padding:8px 10px;font-size:12.5px;
     font-weight:600;margin-top:12px}
   .login-err.show{display:block}
@@ -254,12 +278,17 @@
   .modal-b{padding:18px 16px}
   #toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--negro);
     color:#fff;padding:11px 20px;border-radius:6px;font-size:13.5px;box-shadow:0 6px 24px rgba(0,0,0,.25);opacity:0;
-    pointer-events:none;transition:.25s;z-index:99;border-left:4px solid var(--naranja);max-width:90vw}
+    pointer-events:none;transition:opacity .25s ease,transform .3s cubic-bezier(.34,1.56,.64,1);z-index:99;border-left:4px solid var(--naranja);max-width:90vw}
   #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   #toast.ok{border-left-color:var(--verde)}#toast.err{border-left-color:var(--rojo)}
 
   footer.app{max-width:1200px;margin:20px auto 0;padding:14px 20px;color:var(--gris-txt);font-size:11.5px;
     border-top:1px solid var(--gris-linea);text-align:center}
+
+  @media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;
+      transition-duration:.001ms!important;scroll-behavior:auto!important}
+  }
 </style>
 </head>
 <body>
@@ -276,6 +305,10 @@
       <div class="field"><label>Usuario</label><select id="lg-user"></select></div>
       <div class="field" style="margin-top:12px"><label>PIN</label>
         <input type="password" id="lg-pin" placeholder="Introduce tu PIN" autocomplete="off"></div>
+      <div class="login-remember">
+        <label><input type="checkbox" id="lg-remember-user"> Recordar usuario</label>
+        <label><input type="checkbox" id="lg-remember-pin"> Recordar contraseña (PIN)</label>
+      </div>
       <div class="login-err" id="lg-err">Usuario o PIN incorrecto.</div>
       <button class="btn btn-primary btn-lg" id="btnLogin" style="width:100%;justify-content:center;margin-top:18px">Entrar</button>
     </div>
@@ -287,6 +320,7 @@
     <div class="marca"><img id="brandHeader" class="brand-logo" alt="INGECART · Engineering & Auditing"></div>
     <div class="titulo-app"><h1>Portal de Partes de Horas</h1><p>Registro y control de horas por OF</p></div>
     <div class="usr-box">
+      <div class="estado-db" title="El panel y los partes se actualizan solos cada 10 minutos"><span class="dot live"></span><span id="badgeActualizado">Sin actualizar</span></div>
       <div class="estado-db"><span class="dot" id="dbDot"></span><span id="dbTxt">Sin conectar</span></div>
       <div class="usr-info"><div class="n" id="usrNombre">—</div><div class="r" id="usrRol"></div></div>
       <button class="btn-logout" id="btnMiPin">Cambiar PIN</button>
@@ -300,7 +334,7 @@
     <button class="tab active" data-tab="parte">Nuevo parte</button>
     <button class="tab" data-tab="consulta">Consulta por OF</button>
     <button class="tab" data-tab="config" data-admin>Configuración</button>
-    <button class="tab" data-tab="datos" data-admin>Base de datos</button>
+    <button class="tab" data-tab="datos" data-dev>Base de datos</button>
   </div>
 </nav>
 
@@ -371,7 +405,7 @@
           <div class="field"><label>Trabajador</label><select id="c-trab"></select></div>
           <div class="field"><label>Categoría</label><select id="c-cat"></select></div>
         </div>
-        <div class="actions">
+        <div class="actions" style="align-items:center">
           <button class="btn btn-dark" id="btnConsultar">Ver panel</button>
           <button class="btn btn-ghost" id="btnCsvOf">Exportar CSV</button>
           <button class="btn btn-ghost" id="btnInforme">Informe / Imprimir (PDF)</button>
@@ -393,7 +427,7 @@
           <div class="inline-add">
             <div class="field"><label>Nombre</label><input id="nt-nombre" placeholder="Marc Vidal"></div>
             <div class="field"><label>Usuario</label><input id="nt-user" placeholder="mvidal"></div>
-            <div class="field" style="min-width:90px"><label>PIN</label><input id="nt-pin" placeholder="4 dígitos"></div>
+            <div class="field" style="min-width:90px"><label>PIN</label><input id="nt-pin" placeholder="mín. 6 dígitos"></div>
             <div class="field" style="min-width:110px"><label>Rol</label>
               <select id="nt-rol"><option value="trabajador">Trabajador</option><option value="admin">Administrador</option></select></div>
             <button class="btn btn-primary btn-sm" id="btnAddTrab">Añadir</button>
@@ -423,7 +457,7 @@
           <div class="field"><label>Nombre empresa</label><input id="no-emp" placeholder="Empresa ejecutora"></div>
           <div class="field"><label>Cliente (opcional)</label><input id="no-cli" placeholder="ACME S.A."></div>
           <div class="field"><label>Distribuidor (opcional)</label><input id="no-dist" placeholder="Distribuidora X"></div>
-          <div class="field" style="min-width:120px"><label>Horas previstas</label><input id="no-prev" type="number" step="0.5" min="0" placeholder="0"></div>
+          <div class="field" style="min-width:120px"><label>Horas previstas (opcional)</label><input id="no-prev" type="number" step="0.5" min="0" placeholder="0"></div>
           <button class="btn btn-primary btn-sm" id="btnAddOf">Añadir</button>
         </div>
       </div>
@@ -433,6 +467,38 @@
   <!-- ===== BASE DE DATOS ===== -->
   <section class="panel" id="panel-datos">
     <div class="aviso" id="avisoModo"></div>
+
+    <div class="card">
+      <div class="card-h">🔄 Estado de sincronización</div>
+      <div class="card-b">
+        <div class="kpis" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:16px">
+          <div class="kpi" style="background:#fff;border:1px solid var(--gris-linea);border-left:4px solid var(--naranja);border-radius:5px;padding:12px 14px"><div style="font-size:16px;font-weight:800" id="syncToken">—</div><div class="muted">Token GitHub</div></div>
+          <div class="kpi" style="background:#fff;border:1px solid var(--gris-linea);border-left:4px solid var(--naranja);border-radius:5px;padding:12px 14px"><div style="font-size:16px;font-weight:800" id="syncLectura">—</div><div class="muted">Última lectura OK</div></div>
+          <div class="kpi" style="background:#fff;border:1px solid var(--gris-linea);border-left:4px solid var(--naranja);border-radius:5px;padding:12px 14px"><div style="font-size:16px;font-weight:800" id="syncEscritura">—</div><div class="muted">Último guardado OK en GitHub</div></div>
+          <div class="kpi" style="background:#fff;border:1px solid var(--gris-linea);border-left:4px solid var(--naranja);border-radius:5px;padding:12px 14px"><div style="font-size:16px;font-weight:800" id="syncPendiente">—</div><div class="muted">Cambios sin guardar en la nube</div></div>
+        </div>
+        <div class="actions" style="margin-bottom:12px">
+          <button class="btn btn-dark btn-sm" id="btnForzarLectura">Forzar lectura ahora</button>
+          <button class="btn btn-dark btn-sm" id="btnValidarTokenAhora">Validar token ahora</button>
+          <button class="btn btn-ghost btn-sm" id="btnLimpiarSyncLog">Limpiar registro</button>
+        </div>
+        <p class="muted" style="margin-top:0">El token se valida automáticamente al abrir la app, tras guardar la configuración GitHub y cada 5 minutos mientras haya sesión abierta.</p>
+        <label style="font-weight:600;display:block;margin-bottom:6px">Registro de sincronización (lecturas/guardados de esta sesión)</label>
+        <div class="tabla-wrap" style="max-height:240px;overflow-y:auto"><table class="scada-table" id="tablaSyncLog"></table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-h">👥 Actividad de usuarios</div>
+      <div class="card-b">
+        <p class="muted" style="margin-top:0">Refleja los datos de la última lectura desde GitHub — pulsa "Forzar lectura ahora" arriba para verla al día.</p>
+        <label style="font-weight:600;display:block;margin-bottom:6px">Última actividad por usuario</label>
+        <div id="actividadPorUsuario" style="margin-bottom:18px"></div>
+        <label style="font-weight:600;display:block;margin-bottom:6px">Últimos partes cargados (todos los usuarios)</label>
+        <div class="tabla-wrap"><table id="tablaActividadReciente"></table></div>
+      </div>
+    </div>
+
     <div class="card">
       <div class="card-h">Base de datos en la nube (GitHub)</div>
       <div class="card-b">
@@ -447,13 +513,14 @@
           <div class="field"><label>Repositorio GitHub</label><input id="ghRepo" value="senarzuniga/PORTAL-PARTES-DE-TRABAJO" placeholder="usuario/repositorio"></div>
           <div class="field"><label>Rama</label><input id="ghBranch" value="main" placeholder="main"></div>
           <div class="field"><label>Archivo JSON</label><input id="ghPath" value="partes_horas_db.json" placeholder="partes_horas_db.json"></div>
-          <div class="field"><label>Token GitHub (solo para guardar)</label><input id="ghToken" type="password" placeholder="ghp_..."></div>
+          <div class="field"><label>Token GitHub (para guardar y para leer sin límite de peticiones)</label><input id="ghToken" type="password" placeholder="ghp_..."></div>
         </div>
         <div class="actions" id="accionesFsa">
           <button class="btn btn-primary" id="btnNuevoArch">Guardar configuración GitHub</button>
           <button class="btn btn-dark" id="btnAbrirArch">Recargar desde GitHub</button>
           <button class="btn btn-ghost" id="btnReconectar">Probar conexión</button>
           <button class="btn btn-ghost" id="btnGuardarAhora">Guardar ahora</button>
+          <button class="btn btn-danger" id="btnQuitarToken">Quitar token de este navegador</button>
         </div>
         <div class="actions" style="margin-top:12px">
           <button class="btn btn-ghost" id="btnExportJson">Descargar copia (JSON)</button>
@@ -471,7 +538,92 @@
         <li>Para guardar cambios en la nube, pega un <b>token de GitHub</b> con permisos de contenido sobre el repositorio.</li>
         <li>Pulsa <b>“Guardar configuración GitHub”</b> una vez en ese navegador.</li>
         <li>Al entrar en otro equipo, la app leerá automáticamente <code>partes_horas_db.json</code> desde GitHub; para escribir necesitarás volver a pegar el token en ese navegador.</li>
-      </ol><p class="muted" style="margin:10px 0 0">La sincronización sigue siendo del tipo “el último que guarda manda”. El token se guarda solo en este navegador.</p></div></div>
+      </ol><p class="muted" style="margin:10px 0 0">La sincronización sigue siendo del tipo “el último que guarda manda”. El token se guarda solo en este navegador (localStorage), en texto plano.</p></div></div>
+    </div>
+    <div class="card">
+      <div class="card-h">⚠️ Importante sobre el token de GitHub</div>
+      <div class="card-b">
+        <div class="aviso">
+          Este token equivale a una <b>contraseña con permiso de escritura sobre el repositorio</b>. Cualquiera con acceso a
+          este navegador (equipo compartido, sesión sin bloquear, extensión maliciosa) puede copiarlo y usarlo para modificar
+          o borrar la base de datos completa.
+          <ol>
+            <li>Usa un <b>token de tipo "fine-grained"</b> (no "classic"), limitado <b>solo a este repositorio</b> y con permiso
+              únicamente de <b>Contents: Read and write</b> — nada más.</li>
+            <li>Ponle una <b>fecha de caducidad corta</b> (p. ej. 90 días) y renuévalo periódicamente.</li>
+            <li>No lo pegues en equipos compartidos o públicos. Si lo hiciste, pulsa <b>“Quitar token de este navegador”</b> y
+              revócalo también desde GitHub (Settings → Developer settings → Tokens).</li>
+            <li>Esto reduce el riesgo pero no lo elimina: mientras el token viva en el navegador, sigue siendo extraíble.
+              Una solución definitiva requiere que el token viva en un servidor (proxy) en lugar del navegador.</li>
+          </ol>
+        </div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-h">🛠️ Herramientas de Base de Datos (Developer)</div>
+      <div class="card-b">
+        <div class="aviso">Acciones rápidas para mantener y depurar la base de datos</div>
+        <div style="margin-bottom:20px">
+          <label style="font-weight:600;display:block;margin-bottom:8px">Editor JSON (edición directa)</label>
+          <textarea id="dbJsonEditor" style="width:100%;height:300px;font-family:monospace;font-size:12px;padding:8px;border:1px solid var(--gris-linea);border-radius:4px;resize:vertical" placeholder="Edita la BD directamente (cuidado: cambios directos)"></textarea>
+          <div class="actions" style="margin-top:8px">
+            <button class="btn btn-ghost btn-sm" id="btnCargarJsonEditor">Cargar BD actual</button>
+            <button class="btn btn-primary btn-sm" id="btnGuardarJsonEditor">Guardar cambios</button>
+            <button class="btn btn-ghost btn-sm" id="btnValidarJson">Validar JSON</button>
+          </div>
+        </div>
+        <div style="margin-bottom:20px;padding:12px;background:#f9f9f9;border-radius:4px">
+          <label style="font-weight:600;display:block;margin-bottom:8px">Limpiar datos</label>
+          <div class="actions">
+            <button class="btn btn-ghost btn-sm" id="btnLimpiarPartesAntigos">Borrar partes > 1 año</button>
+            <button class="btn btn-ghost btn-sm" id="btnLimpiarUsersSinPin">Borrar usuarios sin PIN</button>
+            <button class="btn btn-ghost btn-sm" id="btnLimpiarPartesVacios">Borrar partes vacíos</button>
+            <button class="btn btn-danger btn-sm" id="btnResetAll">⚠️ Resetear TODO a demo</button>
+          </div>
+        </div>
+        <div style="margin-bottom:20px">
+          <label style="font-weight:600;display:block;margin-bottom:8px">Buscar y reemplazar</label>
+          <div class="grid g2">
+            <input id="dbSearchTerm" placeholder="Buscar..." style="padding:8px;border:1px solid var(--gris-linea);border-radius:4px">
+            <input id="dbReplaceTerm" placeholder="Reemplazar con..." style="padding:8px;border:1px solid var(--gris-linea);border-radius:4px">
+          </div>
+          <div class="actions" style="margin-top:8px">
+            <button class="btn btn-ghost btn-sm" id="btnBuscarEnBd">Buscar (mostrar coincidencias)</button>
+            <button class="btn btn-primary btn-sm" id="btnReemplazarEnBd">Reemplazar todo</button>
+          </div>
+          <div id="dbSearchResults" style="margin-top:8px;padding:8px;background:#f0f0f0;border-radius:4px;display:none;max-height:200px;overflow-y:auto;font-size:12px;white-space:pre-wrap;font-family:monospace"></div>
+        </div>
+        <div style="margin-bottom:20px;padding:12px;background:#f0f5f9;border-radius:4px">
+          <label style="font-weight:600;display:block;margin-bottom:8px">Estadísticas detalladas</label>
+          <div id="dbStats" style="font-size:13px;line-height:1.6"></div>
+          <button class="btn btn-ghost btn-sm" id="btnRefreshStats" style="margin-top:8px">Actualizar estadísticas</button>
+        </div>
+        <div style="padding:12px;background:#faf3e6;border-radius:4px">
+          <label style="font-weight:600;display:block;margin-bottom:8px">Copias de seguridad</label>
+          <div class="actions">
+            <button class="btn btn-ghost btn-sm" id="btnCrearBackup">📦 Crear backup ahora</button>
+            <button class="btn btn-ghost btn-sm" id="btnListarBackups">📋 Ver backups</button>
+            <button class="btn btn-ghost btn-sm" id="btnRestaurarBackup">↩️ Restaurar desde backup</button>
+          </div>
+          <div id="dbBackupInfo" style="margin-top:8px;font-size:12px;color:#666"></div>
+        </div>
+        <div style="margin-top:20px;padding:12px;background:#eef7f0;border-radius:4px">
+          <label style="font-weight:600;display:block;margin-bottom:8px">Diagnóstico</label>
+          <div class="actions">
+            <button class="btn btn-ghost btn-sm" id="btnValidarIntegridad">🔍 Validar integridad de datos</button>
+            <button class="btn btn-ghost btn-sm" id="btnEstadoGithubApi">🌐 Estado de la API de GitHub</button>
+            <button class="btn btn-ghost btn-sm" id="btnDiagnosticoEntorno">🧪 Diagnóstico del entorno</button>
+          </div>
+          <div id="dbDiagResults" style="margin-top:8px;padding:8px;background:#fff;border-radius:4px;display:none;max-height:260px;overflow-y:auto;font-size:12px;white-space:pre-wrap;font-family:monospace"></div>
+        </div>
+        <div style="margin-top:20px;padding:12px;background:#fdecea;border-radius:4px">
+          <label style="font-weight:600;display:block;margin-bottom:8px">Mantenimiento avanzado</label>
+          <div class="actions">
+            <button class="btn btn-ghost btn-sm" id="btnPurgarCache">🧹 Purgar caché local y recargar de GitHub</button>
+            <button class="btn btn-danger btn-sm" id="btnVaciarBackups">🗑️ Vaciar backups locales</button>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -531,15 +683,62 @@ const numES=n=>(Number(n)||0).toLocaleString('es-ES',{maximumFractionDigits:2});
 const fmtFecha=f=>{if(!f)return'';const[a,m,d]=f.split('-');return `${d}/${m}/${a}`;};
 const fmtDia=f=>{if(!f)return'';const[a,m,d]=f.split('-');return `${d}/${m}`;};
 function toast(m,t){const e=$('#toast');e.textContent=m;e.className='';if(t)e.classList.add(t);e.classList.add('show');clearTimeout(e._h);e._h=setTimeout(()=>e.classList.remove('show'),2600);}
+async function conCarga(btnSel,fn){
+  const btn=$(btnSel);
+  if(btn){if(btn.disabled)return;btn.disabled=true;btn.classList.add('is-loading');}
+  try{await fn();}
+  finally{if(btn){btn.disabled=false;btn.classList.remove('is-loading');}}
+}
 const PALETA=['#E8531B','#F2A03D','#2FB4C4','#4C8BF5','#7B61FF','#2E8B57','#C0392B','#8E7CC3','#E0A800','#17A2B8','#6C8E3F','#D6336C','#495867','#1098AD','#9C6644'];
 
-async function hashPin(pin){
+/* PIN hashing: PBKDF2-SHA256 con salt aleatorio por usuario (formato "pbkdf2$iteraciones$saltHex$hashHex").
+   Se mantiene compatibilidad de lectura con el formato antiguo (sha256 con salt fijo, sin "$") para no
+   invalidar PINs ya guardados: se verifican igual y se migran automáticamente al formato nuevo en el
+   siguiente login correcto (ver hacerLogin). */
+const PIN_ITERACIONES=150000;
+function bytesToHex(b){return [...b].map(x=>x.toString(16).padStart(2,'0')).join('');}
+function hexToBytes(hex){const a=new Uint8Array(hex.length/2);for(let i=0;i<a.length;i++)a[i]=parseInt(hex.substr(i*2,2),16);return a;}
+async function hashPinLegacy(pin){
   const s='ingecart::'+pin;
   if(window.crypto&&crypto.subtle){try{
     const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));
-    return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
+    return bytesToHex(new Uint8Array(b));
   }catch(e){}}
   let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return 'f'+h.toString(16);
+}
+async function derivarPinHash(pin,saltBytes,iteraciones){
+  iteraciones=iteraciones||PIN_ITERACIONES;
+  if(window.crypto&&crypto.subtle){try{
+    const keyMaterial=await crypto.subtle.importKey('raw',new TextEncoder().encode('ingecart::'+pin),{name:'PBKDF2'},false,['deriveBits']);
+    const bits=await crypto.subtle.deriveBits({name:'PBKDF2',salt:saltBytes,iterations:iteraciones,hash:'SHA-256'},keyMaterial,256);
+    return `pbkdf2$${iteraciones}$${bytesToHex(saltBytes)}$${bytesToHex(new Uint8Array(bits))}`;
+  }catch(e){}}
+  // fallback si no hay Web Crypto disponible (navegador muy antiguo / contexto no seguro): más débil, solo compatibilidad
+  const legacy=await hashPinLegacy(pin+'::'+bytesToHex(saltBytes));
+  return `legacy$0$${bytesToHex(saltBytes)}$${legacy}`;
+}
+async function crearPinHash(pin){
+  const salt=window.crypto&&crypto.getRandomValues?crypto.getRandomValues(new Uint8Array(16)):hexToBytes(Array.from({length:32},()=>Math.floor(Math.random()*16).toString(16)).join(''));
+  return derivarPinHash(pin,salt);
+}
+async function verificarPin(pin,stored){
+  if(!stored)return false;
+  if(stored.includes('$')){
+    const partes=stored.split('$');
+    const iteraciones=Number(partes[1])||PIN_ITERACIONES;
+    const saltHex=partes[2], hashHex=partes[3];
+    const calc=await derivarPinHash(pin,hexToBytes(saltHex),iteraciones);
+    return calc.split('$')[3]===hashHex;
+  }
+  // formato antiguo: sha256('ingecart::'+pin) sin salt por usuario
+  return (await hashPinLegacy(pin))===stored;
+}
+function pinEsFormatoAntiguo(stored){return !!stored&&!stored.includes('$');}
+function pinValido(pin){return /^\d{6,}$/.test((pin||'').trim());}
+function generarPinTemporal(){
+  const arr=new Uint32Array(1);
+  if(window.crypto&&crypto.getRandomValues)crypto.getRandomValues(arr);else arr[0]=Math.floor(Math.random()*1e9);
+  return String(100000+(arr[0]%900000));
 }
 
 /* ================= ESTADO ================= */
@@ -551,27 +750,101 @@ const CATS_DEFECTO=['Ingeniería mecánica','Ingeniería eléctrica','Ingenierí
 let state={meta:{version:2,lastSaved:null},trabajadores:[],ofs:[],categorias:[],partes:[]};
 let sesion=null;
 let ultimoAutoRefreshGithub=0;
+let estadoInicialDemo=null;
 function esAdminBase(t){return !!t&&(t.id==='trab-admin'||(t.usuario||'').trim().toLowerCase()==='admin');}
+function esDeveloperSesion(){return !!(sesion&&sesion.rol==='developer');}
+function requireDeveloperAction(){
+  if(esDeveloperSesion())return true;
+  toast('Acción solo disponible para Developer','err');
+  return false;
+}
 async function asegurarAdminBase(){
   let admin=state.trabajadores.find(esAdminBase);
   if(!admin){
-    admin={id:'trab-admin',nombre:'Administrador',usuario:'admin',pinHash:await hashPin('1234'),rol:'admin'};
+    const pinTemporal=generarPinTemporal();
+    admin={id:'trab-admin',nombre:'Administrador',usuario:'admin',pinHash:await crearPinHash(pinTemporal),rol:'admin',debeCambiarPin:true};
     state.trabajadores.unshift(admin);
-    return true;
+    return {cambiado:true,pinTemporal};
   }
   let cambiado=false;
+  let pinTemporal=null;
   if(admin.id!=='trab-admin'){admin.id='trab-admin';cambiado=true;}
   if((admin.usuario||'').trim().toLowerCase()!=='admin'){admin.usuario='admin';cambiado=true;}
   if(admin.nombre!=='Administrador'){admin.nombre='Administrador';cambiado=true;}
   if(admin.rol!=='admin'){admin.rol='admin';cambiado=true;}
-  if(!admin.pinHash){admin.pinHash=await hashPin('1234');cambiado=true;}
-  return cambiado;
+  if(!admin.pinHash){pinTemporal=generarPinTemporal();admin.pinHash=await crearPinHash(pinTemporal);admin.debeCambiarPin=true;cambiado=true;}
+  return {cambiado,pinTemporal};
 }
 
 /* ================= PERSISTENCIA ================= */
-const FSA=('showOpenFilePicker' in window), LS_KEY='ingecart_partes_db_v2', GH_KEY='ingecart_partes_github_v1';
+const FSA=('showOpenFilePicker' in window), LS_KEY='ingecart_partes_db_v2', GH_KEY='ingecart_partes_github_v1', LOGIN_PREFS_KEY='ingecart_login_prefs_v1';
 let dbHandle=null;
 let ghSha=null;
+let ghWriteState='unknown'; // unknown | ok | invalid | missing
+let ultimoGuardadoGithubOk=null; // fecha del último PUT confirmado por GitHub (distinto de state.meta.lastSaved, que se marca aunque falle)
+let hayCambiosSinGuardar=false;
+let syncLog=[]; // registro de intentos de lectura/escritura en esta sesión (no se sincroniza, es solo de este navegador)
+function haceTiempo(fecha){
+  if(!fecha)return'—';
+  const s=Math.max(0,Math.round((Date.now()-fecha.getTime())/1000));
+  if(s<5)return'justo ahora';
+  if(s<60)return'hace '+s+'s';
+  const min=Math.round(s/60);
+  if(min<60)return'hace '+min+' min';
+  const h=Math.round(min/60);
+  if(h<48)return'hace '+h+' h';
+  return'hace '+Math.round(h/24)+' d';
+}
+function registrarSync(tipo,ok,mensaje){
+  syncLog.unshift({ts:new Date(),tipo,ok,mensaje:mensaje||''});
+  if(syncLog.length>50)syncLog.length=50;
+  renderSyncLog();
+}
+function renderSyncLog(){
+  const t=$('#tablaSyncLog');if(!t)return;
+  if(!syncLog.length){t.innerHTML='<tbody><tr><td class="empty">Sin actividad de sincronización todavía en esta sesión.</td></tr></tbody>';return;}
+  t.innerHTML='<thead><tr><th>Hora</th><th>Tipo</th><th>Resultado</th><th>Detalle</th></tr></thead><tbody>'+
+    syncLog.map(e=>`<tr><td class="muted" style="white-space:nowrap">${e.ts.toLocaleTimeString('es-ES')}</td><td>${esc(e.tipo)}</td>
+      <td><span class="tag" style="background:${e.ok?'#e3f3ea':'#fdecea'};color:${e.ok?'var(--verde)':'var(--rojo)'}">${e.ok?'OK':'ERROR'}</span></td>
+      <td class="muted">${esc(e.mensaje)}</td></tr>`).join('')+'</tbody>';
+}
+function renderSyncStatus(){
+  const cfg=ghConfig();
+  const elTok=$('#syncToken');
+  if(elTok){
+    if(!cfg.token){elTok.textContent='Sin token (solo lectura)';elTok.style.color='var(--gris-txt)';}
+    else if(ghWriteState==='invalid'){elTok.textContent='Inválido';elTok.style.color='var(--rojo)';}
+    else if(ghWriteState==='ok'){elTok.textContent='Válido';elTok.style.color='var(--verde)';}
+    else{elTok.textContent='Sin verificar aún';elTok.style.color='#c8871a';}
+  }
+  const elLect=$('#syncLectura');if(elLect)elLect.textContent=ultimaActualizacionPanel?haceTiempo(ultimaActualizacionPanel):'Nunca en esta sesión';
+  const elEsc=$('#syncEscritura');if(elEsc)elEsc.textContent=ultimoGuardadoGithubOk?haceTiempo(ultimoGuardadoGithubOk):'Nunca en esta sesión';
+  const elPend=$('#syncPendiente');
+  if(elPend){elPend.textContent=hayCambiosSinGuardar?'Sí — revisa el token/conexión':'No';elPend.style.color=hayCambiosSinGuardar?'var(--rojo)':'var(--verde)';}
+}
+function renderActividadUsuarios(){
+  const porUsuario=$('#actividadPorUsuario');
+  if(porUsuario){
+    const filas=state.trabajadores.map(t=>{
+      const propios=state.partes.filter(p=>p.trabId===t.id);
+      const ultimo=propios.reduce((max,p)=>(!max||(p.creado||'')>(max.creado||''))?p:max,null);
+      return {t,ultimo,total:propios.length};
+    }).sort((a,b)=>(b.ultimo?b.ultimo.creado:'').localeCompare(a.ultimo?a.ultimo.creado:''));
+    porUsuario.innerHTML=filas.length?filas.map(({t,ultimo,total})=>`<div class="list-item">
+      <div class="li-main"><div class="li-t">${esc(t.nombre)} <span class="tag tag-rol ${t.rol==='admin'?'':(t.rol==='developer'?'':'tr')}">${t.rol==='admin'?'ADMIN':(t.rol==='developer'?'DEV':'trab.')}</span></div>
+        <div class="li-s">${total} parte${total!==1?'s':''} en total${ultimo?(' · última hace '+esc(haceTiempo(new Date(ultimo.creado)))+' — '+esc(etiquetaOf(ultimo.ofId))):' · sin partes todavía'}</div></div>
+    </div>`).join(''):'<div class="empty">Sin usuarios.</div>';
+  }
+  const tabla=$('#tablaActividadReciente');
+  if(tabla){
+    const recientes=[...state.partes].sort((a,b)=>(b.creado||'').localeCompare(a.creado||'')).slice(0,25);
+    tabla.innerHTML=recientes.length?('<thead><tr><th>Hace</th><th>Usuario</th><th>OF</th><th>Categoría</th><th class="num">Horas</th></tr></thead><tbody>'+
+      recientes.map(p=>`<tr><td class="muted" style="white-space:nowrap">${esc(p.creado?haceTiempo(new Date(p.creado)):'—')}</td>
+        <td>${esc(nombreTrab(p.trabId))}</td><td>${esc(etiquetaOf(p.ofId))}</td>
+        <td><span class="tag tag-cat">${esc(nombreCat(p.catId))}</span></td><td class="num">${numES(p.horas)}</td></tr>`).join('')+'</tbody>')
+      :'<tbody><tr><td class="empty">Todavía no hay partes cargados.</td></tr></tbody>';
+  }
+}
 function idb(){return new Promise((res,rej)=>{const r=indexedDB.open('ingecart_partes',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);});}
 async function idbSet(k,v){const db=await idb();return new Promise((res,rej)=>{const t=db.transaction('kv','readwrite');t.objectStore('kv').put(v,k);t.oncomplete=res;t.onerror=()=>rej(t.error);});}
 async function idbGet(k){const db=await idb();return new Promise((res,rej)=>{const t=db.transaction('kv','readonly');const q=t.objectStore('kv').get(k);q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error);});}
@@ -590,8 +863,10 @@ function guardarGhConfig(){
     token:($('#ghToken').value||'').trim()
   };
   localStorage.setItem(GH_KEY,JSON.stringify(cfg));
-  actualizarEstadoDb();
+  ghWriteState=cfg.token?'unknown':'missing';
+  actualizarEstadoDb();renderSyncStatus();
   toast('Configuración GitHub guardada en este navegador','ok');
+  if(cfg.token)validarTokenGithub(true); // valida en segundo plano sin bloquear ni mostrar toast adicional
   return cfg;
 }
 function cargarGhConfigEnFormulario(){
@@ -626,46 +901,130 @@ async function ghFetch(url,opts){
   }
   throw lastErr||new Error('No se pudo conectar con GitHub');
 }
-async function cargarDesdeGithub(){
+let validandoToken=false;
+async function validarTokenGithub(silencioso){
+  const cfg=ghConfig();
+  if(!cfg.token){ghWriteState='missing';renderSyncStatus();return false;}
+  if(validandoToken)return ghWriteState==='ok'; // evita validaciones solapadas
+  validandoToken=true;
+  try{
+    const r=await ghFetch(`https://api.github.com/repos/${cfg.repo}`,{headers:{'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28','Authorization':'Bearer '+cfg.token}});
+    if(r.status===401||r.status===403){
+      ghWriteState='invalid';
+      registrarSync('Validación token',false,'Token inválido o revocado ('+r.status+')');
+      if(!silencioso)toast('Token GitHub inválido','err');
+      return false;
+    }
+    if(r.status===404){
+      ghWriteState='invalid';
+      registrarSync('Validación token',false,'El repositorio '+cfg.repo+' no existe o el token no tiene acceso a él');
+      if(!silencioso)toast('Repositorio no encontrado o sin acceso con este token','err');
+      return false;
+    }
+    if(!r.ok){
+      registrarSync('Validación token',false,'GitHub devolvió '+r.status+' al comprobar el repositorio');
+      if(!silencioso)toast('No se pudo validar el token (HTTP '+r.status+')','err');
+      return false;
+    }
+    const data=await r.json();
+    const permisos=data.permissions||null;
+    if(permisos&&permisos.push===false){
+      ghWriteState='invalid';
+      registrarSync('Validación token',false,'El token es válido pero no tiene permiso de escritura (push) sobre '+cfg.repo);
+      if(!silencioso)toast('El token no tiene permiso de escritura sobre este repositorio','err');
+      return false;
+    }
+    ghWriteState='ok';
+    registrarSync('Validación token',true,permisos?('Token válido con permiso de escritura sobre '+cfg.repo):('Token válido para '+cfg.repo));
+    if(!silencioso)toast('Token GitHub válido','ok');
+    return true;
+  }catch(err){
+    registrarSync('Validación token',false,(err&&err.message)||'Error de red al validar el token');
+    if(!silencioso)toast('No se pudo validar el token (error de red)','err');
+    return false;
+  }finally{
+    validandoToken=false;
+    renderSyncStatus();
+  }
+}
+async function cargarDesdeGithub(silencioso){
   const cfg=ghConfig();
   try{
-    const r=await ghFetch(ghApiUrl(cfg),{headers:{'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}});
-    if(r.status===404)return false;
+    const headers={'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};
+    if(cfg.token)headers['Authorization']='Bearer '+cfg.token;
+    const r=await ghFetch(ghApiUrl(cfg),{headers});
+    if(r.status===404){registrarSync('Lectura',false,'Archivo no encontrado en el repositorio (404)');return false;}
     if(!r.ok)throw new Error('GitHub devolvió '+r.status);
     const data=await r.json();
     ghSha=data.sha||null;
-    if(data.content){mezclar(JSON.parse(b64ToUtf8(data.content))); return true;}
+    if(data.content){
+      mezclar(JSON.parse(b64ToUtf8(data.content)));
+      registrarSync('Lectura',true,'Leído de '+cfg.repo+'/'+cfg.path);
+      return true;
+    }
+    registrarSync('Lectura',false,'Respuesta sin contenido');
     return false;
-  }catch(err){console.error(err); toast('No se pudo leer GitHub. Se usará la copia local si existe.','err'); return false;}
+  }catch(err){
+    console.error(err);
+    registrarSync('Lectura',false,(err&&err.message)||'Error de red');
+    if(!silencioso)toast('No se pudo leer GitHub. Se usará la copia local si existe.','err');
+    return false;
+  }
+}
+let ultimaActualizacionPanel=null;
+function formatoHaceTiempo(fecha){
+  if(!fecha)return'Sin actualizar';
+  const s=Math.max(0,Math.round((Date.now()-fecha.getTime())/1000));
+  if(s<5)return'Actualizado justo ahora';
+  if(s<60)return'Actualizado hace '+s+'s';
+  const min=Math.round(s/60);
+  if(min<60)return'Actualizado hace '+min+' min';
+  const h=Math.round(min/60);
+  return'Actualizado hace '+h+' h';
+}
+function actualizarBadgeActualizado(){
+  const b=$('#badgeActualizado');if(b)b.textContent=formatoHaceTiempo(ultimaActualizacionPanel);
+  renderSyncStatus();
+}
+function marcarPanelActualizado(){
+  ultimaActualizacionPanel=new Date();actualizarBadgeActualizado();
+  const b=$('#badgeActualizado');if(b){b.classList.remove('pulse');void b.offsetWidth;b.classList.add('pulse');}
 }
 async function refrescarDesdeGithubSiProcede(silencioso){
   const ahora=Date.now();
-  if(ahora-ultimoAutoRefreshGithub<15000)return false;
+  if(ahora-ultimoAutoRefreshGithub<9000)return false;
   ultimoAutoRefreshGithub=ahora;
-  const ok=await cargarDesdeGithub();
+  const ok=await cargarDesdeGithub(silencioso);
   if(!ok)return false;
   try{localStorage.setItem(LS_KEY,JSON.stringify(state,null,2));}catch(e){}
   rellenarLoginUsers();
   renderTodo();
+  marcarPanelActualizado();
   if(!silencioso)toast('Datos actualizados desde GitHub','ok');
   return true;
 }
 async function guardarEnGithub(json,silencioso){
   const cfg=ghConfig();
-  if(!cfg.token)return false;
+  if(!cfg.token){ghWriteState='missing';registrarSync('Guardado',false,'Sin token GitHub configurado (solo local)');return false;}
   const headers={'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28','Authorization':'Bearer '+cfg.token,'Content-Type':'application/json'};
   let sha=ghSha;
   const cuerpo=()=>JSON.stringify({message:'Actualizar partes_horas_db.json',content:utf8ToB64(json),branch:cfg.branch||'main',...(sha?{sha}: {})});
   let r=await ghFetch(ghApiUrl(cfg),{method:'PUT',headers,body:cuerpo()});
+  if(r.status===401||r.status===403){ghWriteState='invalid';const e=new Error('Token GitHub inválido o sin permisos ('+r.status+')');registrarSync('Guardado',false,e.message);throw e;}
   if(r.status===409||r.status===422){
+    registrarSync('Guardado',false,'Conflicto de versión (otro usuario guardó antes) — reintentando con SHA actualizado');
     const meta=await ghFetch(ghApiUrl(cfg),{headers:{'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28','Authorization':'Bearer '+cfg.token}});
-    if(!meta.ok)throw new Error('Conflicto al actualizar y no se pudo refrescar SHA');
+    if(!meta.ok){const e=new Error('Conflicto al actualizar y no se pudo refrescar SHA');registrarSync('Guardado',false,e.message);throw e;}
     const data=await meta.json(); sha=data.sha||null;
     r=await ghFetch(ghApiUrl(cfg),{method:'PUT',headers,body:cuerpo()});
   }
-  if(!r.ok)throw new Error('No se pudo escribir GitHub ('+r.status+')');
+  if(r.status===401||r.status===403){ghWriteState='invalid';const e=new Error('Token GitHub inválido o sin permisos ('+r.status+')');registrarSync('Guardado',false,e.message);throw e;}
+  if(!r.ok){const e=new Error('No se pudo escribir GitHub ('+r.status+')');registrarSync('Guardado',false,e.message);throw e;}
   const data=await r.json();
   ghSha=(data.content&&data.content.sha)||(data.commit&&data.commit.sha)||ghSha;
+  ghWriteState='ok';
+  ultimoGuardadoGithubOk=new Date();
+  registrarSync('Guardado',true,'Guardado en '+cfg.repo+'/'+cfg.path);
   if(!silencioso)toast('Guardado en GitHub correctamente','ok');
   return true;
 }
@@ -675,11 +1034,12 @@ async function persist(silencioso){
   const json=JSON.stringify(state,null,2);
   try{localStorage.setItem(LS_KEY,json);}catch(e){}
   let guardadoGithub=false;
-  try{guardadoGithub=await guardarEnGithub(json,silencioso);}catch(e){toast(e.message||'No se pudo guardar en GitHub','err');}
+  try{guardadoGithub=await guardarEnGithub(json,silencioso);}catch(e){if(/\(401\)|\(403\)/.test(String(e&&e.message||'')))ghWriteState='invalid';toast(e.message||'No se pudo guardar en GitHub','err');}
   if(dbHandle){try{const w=await dbHandle.createWritable();await w.write(json);await w.close();if(!silencioso&&!guardadoGithub)toast('Guardado en archivo local','ok');}
     catch(e){if(!guardadoGithub)toast('No se pudo escribir el archivo local. Guardado solo en navegador.','err');}}
   if(!guardadoGithub&&!dbHandle&&!ghConfig().token&&!silencioso)toast('Sin token GitHub: guardado solo en este navegador','err');
-  actualizarEstadoDb();refrescarKpis();
+  hayCambiosSinGuardar=!guardadoGithub;
+  actualizarEstadoDb();refrescarKpis();renderSyncStatus();renderActividadUsuarios();
 }
 async function cargarDesdeHandle(){const f=await dbHandle.getFile();const t=await f.text();if(t.trim())mezclar(JSON.parse(t));}
 function mezclar(d){
@@ -709,13 +1069,15 @@ async function reconectar(){if(!dbHandle)return;try{const p=await dbHandle.reque
 function actualizarEstadoDb(){
   const dot=$('#dbDot'),txt=$('#dbTxt'),rec=$('#btnReconectar');
   const cfg=ghConfig();
-  if(cfg.token){dot.className='dot on';txt.textContent='GitHub listo';}
+  if(cfg.token&&ghWriteState==='invalid'){dot.className='dot local';txt.textContent='Token GitHub inválido';}
+  else if(cfg.token){dot.className='dot on';txt.textContent='GitHub listo';}
   else if(dbHandle){dot.className='dot on';txt.textContent='Archivo local';}
   else{dot.className='dot local';txt.textContent='Lectura GitHub / guardado local';}
   rec.style.display='inline-flex';
   const ls=$('#lastSaved');if(ls)ls.textContent=state.meta.lastSaved?('Último guardado: '+new Date(state.meta.lastSaved).toLocaleString('es-ES')):'Aún no se ha guardado.';
   const av=$('#avisoModo');if(!av)return;
-  if(cfg.token){av.className='aviso info';av.innerHTML='GitHub configurado con escritura: los cambios se envían a <code>'+esc(cfg.repo+'/'+cfg.path)+'</code>.';}
+  if(cfg.token&&ghWriteState==='invalid'){av.className='aviso';av.innerHTML='El token de GitHub no es válido o no tiene permisos de escritura sobre <code>'+esc(cfg.repo+'/'+cfg.path)+'</code>.';}
+  else if(cfg.token){av.className='aviso info';av.innerHTML='GitHub configurado con escritura: los cambios se envían a <code>'+esc(cfg.repo+'/'+cfg.path)+'</code>.';}
   else{av.className='aviso';av.innerHTML='Carga automática desde GitHub activa: al abrir la app en cualquier equipo se leerá <code>'+esc(cfg.repo+'/'+cfg.path)+'</code>. Sin token, solo el guardado sigue siendo local en ese navegador.';}
 }
 function refrescarKpis(){
@@ -748,29 +1110,105 @@ function rellenarLoginUsers(){
   const sel=$('#lg-user');
   const users=state.trabajadores.filter(t=>t.pinHash);
   sel.innerHTML=users.length?users.map(t=>opcion(t.id,t.nombre+' ('+(t.usuario||'')+')')).join(''):opcion('','(sin usuarios)');
+  const pref=leerLoginPrefs();
+  if(pref.userId&&users.some(u=>u.id===pref.userId))sel.value=pref.userId;
+}
+function leerLoginPrefs(){try{return JSON.parse(localStorage.getItem(LOGIN_PREFS_KEY)||'{}')||{};}catch(e){return {};}}
+function guardarLoginPrefs(){
+  const pref={};
+  if($('#lg-remember-user').checked)pref.userId=$('#lg-user').value||'';
+  if($('#lg-remember-pin').checked){
+    pref.pin=$('#lg-pin').value||'';
+    pref.rememberPin=true;
+  }
+  localStorage.setItem(LOGIN_PREFS_KEY,JSON.stringify(pref));
+}
+function aplicarLoginPrefs(){
+  const pref=leerLoginPrefs();
+  $('#lg-remember-user').checked=!!pref.userId;
+  $('#lg-remember-pin').checked=!!pref.rememberPin;
+  if(pref.rememberPin&&pref.pin)$('#lg-pin').value=pref.pin;
 }
 $('#btnLogin').onclick=hacerLogin;
 $('#lg-pin').addEventListener('keydown',e=>{if(e.key==='Enter')hacerLogin();});
+function enterEnvia(ids,btnId){ids.forEach(id=>{const el=$(id);if(el)el.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$(btnId).click();}});});}
+enterEnvia(['#nt-nombre','#nt-user','#nt-pin'],'#btnAddTrab');
+enterEnvia(['#nc-nombre'],'#btnAddCat');
+enterEnvia(['#no-cod','#no-desc','#no-emp','#no-cli','#no-dist','#no-prev'],'#btnAddOf');
+enterEnvia(['#p-horas','#p-fecha'],'#btnCargarParte');
+$('#lg-remember-user').addEventListener('change',()=>{if(!$('#lg-remember-user').checked)guardarLoginPrefs();});
+$('#lg-remember-pin').addEventListener('change',()=>{if(!$('#lg-remember-pin').checked){$('#lg-pin').value='';guardarLoginPrefs();}});
+$('#lg-user').addEventListener('change',guardarLoginPrefs);
+/* Límite de intentos de login (defensa en cliente contra fuerza bruta desde la propia pantalla de login;
+   no protege si alguien obtiene el JSON de la BD directamente, para eso hace falta backend). */
+const LOGIN_ATTEMPTS_KEY='ingecart_login_attempts_v1';
+function leerIntentosLogin(){try{return JSON.parse(sessionStorage.getItem(LOGIN_ATTEMPTS_KEY)||'{}')||{};}catch(e){return {};}}
+function guardarIntentosLogin(o){try{sessionStorage.setItem(LOGIN_ATTEMPTS_KEY,JSON.stringify(o));}catch(e){}}
+function loginBloqueadoSeg(id){
+  const a=leerIntentosLogin()[id];
+  if(!a||!a.lockUntil)return 0;
+  const rest=Math.ceil((a.lockUntil-Date.now())/1000);
+  return rest>0?rest:0;
+}
+function registrarIntentoFallido(id){
+  const all=leerIntentosLogin();
+  const a=all[id]||{count:0,lockUntil:0};
+  a.count++;
+  if(a.count>=5)a.lockUntil=Date.now()+Math.min(30000*Math.pow(2,a.count-5),300000);
+  all[id]=a; guardarIntentosLogin(all);
+}
+function limpiarIntentosLogin(id){const all=leerIntentosLogin();delete all[id];guardarIntentosLogin(all);}
+
 async function hacerLogin(){
   const id=$('#lg-user').value, pin=$('#lg-pin').value;
   const t=trabPorId(id);
   const err=$('#lg-err');
-  if(!t.id||!t.pinHash){err.classList.add('show');return;}
-  const h=await hashPin(pin);
-  if(h!==t.pinHash){err.classList.add('show');$('#lg-pin').value='';return;}
-  sesion=t; err.classList.remove('show'); $('#lg-pin').value='';
+  if(!t.id||!t.pinHash){err.textContent='Usuario o PIN incorrecto.';err.classList.add('show');return;}
+  const bloqueo=loginBloqueadoSeg(t.id);
+  if(bloqueo){err.textContent='Demasiados intentos fallidos. Espera '+bloqueo+' s e inténtalo de nuevo.';err.classList.add('show');return;}
+  const ok=await verificarPin(pin,t.pinHash);
+  if(!ok){registrarIntentoFallido(t.id);err.textContent='Usuario o PIN incorrecto.';err.classList.add('show');$('#lg-pin').value='';return;}
+  limpiarIntentosLogin(t.id);
+  // migra automáticamente los PIN guardados con el formato antiguo (sin salt por usuario) al nuevo formato reforzado
+  if(pinEsFormatoAntiguo(t.pinHash)){t.pinHash=await crearPinHash(pin);await persist(true);}
+  if(esAdminBase(t)&&pin==='1234')t.debeCambiarPin=true; // credencial por defecto detectada: forzar rotación
+  sesion=t; err.classList.remove('show');
+  guardarLoginPrefs();
+  if(!$('#lg-remember-pin').checked)$('#lg-pin').value='';
   $('#loginOv').style.display='none';
   aplicarSesion();
+  if(sesion.debeCambiarPin)await forzarCambioPin();
+}
+
+async function forzarCambioPin(){
+  toast('Por seguridad, establece un PIN nuevo de al menos 6 dígitos','err');
+  while(sesion&&sesion.debeCambiarPin){
+    const nuevo=prompt('PIN nuevo (mínimo 6 dígitos) para '+sesion.nombre+':');
+    if(nuevo===null){$('#btnLogout').click();toast('Debes fijar un PIN nuevo para poder usar la aplicación','err');return;}
+    if(!pinValido(nuevo)){toast('El PIN debe tener al menos 6 dígitos numéricos','err');continue;}
+    const conf=prompt('Repite el PIN nuevo:');
+    if(conf===null)continue;
+    if(nuevo.trim()!==conf.trim()){toast('Los PIN no coinciden','err');continue;}
+    sesion.pinHash=await crearPinHash(nuevo.trim());
+    delete sesion.debeCambiarPin;
+    await persist(true);
+    toast('PIN actualizado correctamente','ok');
+    return;
+  }
 }
 function aplicarSesion(){
   $('#usrNombre').textContent=sesion.nombre;
-  $('#usrRol').textContent=sesion.rol==='admin'?'Administrador':'Trabajador';
+  $('#usrRol').textContent=sesion.rol==='admin'?'Administrador':(sesion.rol==='developer'?'Developer':'Trabajador');
   $('#p-trab-txt').textContent=sesion.nombre;
   const admin=sesion.rol==='admin';
-  $$('[data-admin]').forEach(t=>t.classList.toggle('hidden',!admin));
-  // si estaba en pestaña admin y no es admin, volver a parte
+  const dev=sesion.rol==='developer';
+  const canConfig=admin||dev;
+  $$('[data-admin]').forEach(t=>t.classList.toggle('hidden',!canConfig));
+  $$('[data-dev]').forEach(t=>t.classList.toggle('hidden',!dev));
+  // si estaba en pestaña restringida y no tiene permiso, volver a parte
   const act=$('.tab.active');
-  if(act&&act.hasAttribute('data-admin')&&!admin) irTab('parte');
+  if(act&&act.hasAttribute('data-admin')&&!canConfig) irTab('parte');
+  if(act&&act.hasAttribute('data-dev')&&!dev) irTab('parte');
   renderTodo();
 }
 $('#btnLogout').onclick=()=>{sesion=null;rellenarLoginUsers();$('#lg-user').selectedIndex=0;$('#loginOv').style.display='flex';irTab('parte');};
@@ -780,20 +1218,23 @@ async function cambiarMiPin(){
   if(!sesion)return;
   const actual=prompt('Introduce tu PIN actual:');
   if(actual===null)return;
-  if(await hashPin(actual)!==sesion.pinHash){toast('PIN actual incorrecto','err');return;}
-  const nuevo=prompt('Nuevo PIN:');
+  if(!(await verificarPin(actual,sesion.pinHash))){toast('PIN actual incorrecto','err');return;}
+  const nuevo=prompt('Nuevo PIN (mínimo 6 dígitos):');
   if(nuevo===null)return;
-  if(!nuevo.trim()){toast('El PIN no puede estar vacío','err');return;}
+  if(!pinValido(nuevo)){toast('El PIN debe tener al menos 6 dígitos numéricos','err');return;}
   const conf=prompt('Repite el nuevo PIN:');
   if(conf===null)return;
-  if(nuevo!==conf){toast('Los PIN no coinciden','err');return;}
-  sesion.pinHash=await hashPin(nuevo.trim());
+  if(nuevo.trim()!==conf.trim()){toast('Los PIN no coinciden','err');return;}
+  sesion.pinHash=await crearPinHash(nuevo.trim());
+  delete sesion.debeCambiarPin;
   await persist(true);rellenarLoginUsers();
   toast('PIN actualizado correctamente','ok');
 }
 
 /* ================= NAVEGACIÓN ================= */
 function irTab(name){
+  if(name==='config'&&!(sesion&&(sesion.rol==='admin'||sesion.rol==='developer'))){toast('La pestaña Configuración requiere perfil Admin o Developer','err');return;}
+  if(name==='datos'&&!esDeveloperSesion()){toast('La pestaña Base de datos es solo para Developer','err');return;}
   $$('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===name));
   $$('.panel').forEach(p=>p.classList.remove('active'));
   const p=$('#panel-'+name);if(p)p.classList.add('active');
@@ -802,7 +1243,7 @@ $('#tabs').addEventListener('click',e=>{const b=e.target.closest('.tab');if(!b||
 
 /* ================= BOTONERA DE HORAS ================= */
 function getHoras(){return parseFloat(($('#p-horas').value||'').replace(',','.'))||0;}
-function setHoras(v){v=Math.max(0,Math.round(v*2)/2);$('#p-horas').value=v?String(v).replace('.',','):'';limpiarErrorCampo($('#p-horas'));}
+function setHoras(v){v=Math.max(0,Math.round(v*2)/2);const el=$('#p-horas');el.value=v?String(v).replace('.',','):'';limpiarErrorCampo(el);el.classList.remove('bump');void el.offsetWidth;el.classList.add('bump');}
 $('#hMinus').onclick=()=>setHoras(getHoras()-0.5);
 $('#hPlus').onclick=()=>setHoras(getHoras()+0.5);
 $$('.chip').forEach(c=>c.onclick=()=>{if(c.dataset.set!=null)setHoras(+c.dataset.set);else setHoras(getHoras()+(+c.dataset.add));});
@@ -814,7 +1255,7 @@ $('#btnLimpiarParte').onclick=()=>{setHoras(0);$('#p-obs').value='';$('#p-fecha'
 function limpiarErrorCampo(el){el.classList.remove('campo-error');}
 function ocultarError(){$('#parteError').classList.remove('show');$('#p-of').classList.remove('campo-error');$('#p-horas').classList.remove('campo-error');$('#p-cat').classList.remove('campo-error');}
 
-$('#btnCargarParte').onclick=async()=>{
+$('#btnCargarParte').onclick=()=>conCarga('#btnCargarParte',async()=>{
   ocultarError();
   const ofId=$('#p-of').value, catId=$('#p-cat').value, fecha=$('#p-fecha').value, horas=getHoras(), obs=$('#p-obs').value.trim();
   const faltan=[];
@@ -834,11 +1275,13 @@ $('#btnCargarParte').onclick=async()=>{
   mostrarOk(`<b>${esc(sesion.nombre)}</b> · ${esc(of.codigo)} · <b>${numES(horas)} h</b> · ${fmtFecha(fecha)}`);
   setHoras(0);$('#p-obs').value='';
   renderUltimos();
-};
+});
 
 function partesDe(trabId){return state.partes.filter(p=>p.trabId===trabId);}
 function renderUltimos(){
-  const cont=$('#tablaUltimos').closest('.card-b');
+  const tabla=$('#tablaUltimos');
+  const cont=(tabla&&tabla.closest('.card-b'))||$('#panel-parte .card:last-of-type .card-b');
+  if(!cont)return;
   if(!sesion)return;
   const mios=[...partesDe(sesion.id)].sort((a,b)=>(b.creado||'').localeCompare(a.creado||'')).slice(0,15);
   $('#ultTotal').textContent=partesDe(sesion.id).length?(partesDe(sesion.id).length+' partes tuyos'):'';
@@ -921,7 +1364,7 @@ function consultar(){
   const det=filas.map(p=>`<tr><td>${fmtFecha(p.fecha)}</td><td>${esc(nombreTrab(p.trabId))}</td>
      ${of==='__all'?`<td>${esc(etiquetaOf(p.ofId))}</td>`:''}
      <td>${esc(nombreCat(p.catId))}</td><td class="num">${numES(p.horas)}</td><td>${esc(p.obs||'')}</td>
-     ${sesion&&sesion.rol==='admin'?`<td class="row-del"><button class="btn btn-ghost btn-sm" data-edit="${p.id}">Editar</button> <button class="btn btn-danger btn-sm" data-del="${p.id}">Borrar</button></td>`:''}</tr>`).join('');
+     ${sesion&&(sesion.rol==='admin'||sesion.rol==='developer')?`<td class="row-del"><button class="btn btn-ghost btn-sm" data-edit="${p.id}">Editar</button> <button class="btn btn-danger btn-sm" data-del="${p.id}">Borrar</button></td>`:''}</tr>`).join('');
 
   const o=ofPorId(of);
   const infoOf=of==='__all'?'':`<span class="h-sub">${esc([o.empresa,o.cliente&&('Cliente: '+o.cliente),o.distribuidor&&('Distrib.: '+o.distribuidor)].filter(Boolean).join(' · '))}</span>`;
@@ -938,7 +1381,11 @@ function consultar(){
 
   cont.innerHTML=`
   <div class="scada">
-    <div class="scada-h"><div class="st"><b>SCADA</b> · ${esc(titOf)}${esc(filtroTxt)}</div><div class="led"><i></i> MONITORIZANDO</div></div>
+    <div class="scada-h"><div class="st"><b>SCADA</b> · ${esc(titOf)}${esc(filtroTxt)}</div>
+      <div style="display:flex;align-items:center;gap:14px">
+        <div class="led"><i></i> MONITORIZANDO</div>
+        <button type="button" class="btn btn-ghost btn-sm" id="btnActualizarPanel">↻ Actualizar</button>
+      </div></div>
     <div class="scada-body">
       <div class="scada-kpis">
         <div class="sk"><div class="v">${numES(total)}<small> h</small></div><div class="l">Horas totales</div></div>
@@ -965,13 +1412,19 @@ function consultar(){
       <div class="scada-mod" style="margin-top:14px">
         <div class="mt">Detalle de partes · ${filas.length} registros ${infoOf?'· '+infoOf.replace(/<[^>]+>/g,''):''}</div>
         <div class="tabla-wrap"><table class="scada-table">
-          <thead><tr><th>Fecha</th><th>Trabajador</th>${of==='__all'?'<th>OF</th>':''}<th>Categoría</th><th class="num">Horas</th><th>Observaciones</th>${sesion&&sesion.rol==='admin'?'<th></th>':''}</tr></thead>
+          <thead><tr><th>Fecha</th><th>Trabajador</th>${of==='__all'?'<th>OF</th>':''}<th>Categoría</th><th class="num">Horas</th><th>Observaciones</th>${sesion&&(sesion.rol==='admin'||sesion.rol==='developer')?'<th></th>':''}</tr></thead>
           <tbody>${det}</tbody></table></div>
       </div>
     </div>
   </div>`;
   cont.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>borrarParte(b.dataset.del));
   cont.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>abrirEditar(b.dataset.edit));
+  const btnAct=$('#btnActualizarPanel');
+  if(btnAct)btnAct.onclick=()=>conCarga('#btnActualizarPanel',async()=>{
+    ultimoAutoRefreshGithub=0;
+    const ok=await refrescarDesdeGithubSiProcede(false);
+    if(!ok)toast('No se pudo actualizar desde GitHub','err');
+  });
 }
 
 /* ================= CONFIG: TRABAJADORES ================= */
@@ -979,7 +1432,7 @@ function renderTrabajadores(){
   const c=$('#listaTrab');if(!c)return;
   if(!state.trabajadores.length){c.innerHTML='<div class="empty">Sin usuarios.</div>';return;}
   c.innerHTML=state.trabajadores.map(t=>`<div class="list-item">
-    <div class="li-main"><div class="li-t">${esc(t.nombre)} <span class="tag tag-rol ${t.rol==='admin'?'':'tr'}">${t.rol==='admin'?'ADMIN':'trab.'}</span></div>
+    <div class="li-main"><div class="li-t">${esc(t.nombre)} <span class="tag tag-rol ${t.rol==='admin'?'':(t.rol==='developer'?'':'tr')}">${t.rol==='admin'?'ADMIN':(t.rol==='developer'?'DEV':'trab.')}</span></div>
       <div class="li-s">usuario: ${esc(t.usuario||'—')} · ${partesDe(t.id).length} partes ${t.pinHash?'':'· ⚠ sin PIN'}</div></div>
     <button class="btn btn-ghost btn-sm" data-pin="${t.id}">PIN</button>
     <button class="btn btn-ghost btn-sm" data-rol="${t.id}">Rol</button>
@@ -988,35 +1441,35 @@ function renderTrabajadores(){
   c.querySelectorAll('[data-rol]').forEach(b=>b.onclick=()=>cambiarRol(b.dataset.rol));
   c.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>eliminarTrab(b.dataset.del));
 }
-$('#btnAddTrab').onclick=async()=>{
-  const n=$('#nt-nombre').value.trim(),u=$('#nt-user').value.trim(),pin=$('#nt-pin').value.trim(),rol=$('#nt-rol').value;
+$('#btnAddTrab').onclick=()=>conCarga('#btnAddTrab',async()=>{
+  const n=$('#nt-nombre').value.trim(),u=$('#nt-user').value.trim(),pin=$('#nt-pin').value.trim(),rol=$('#nt-rol').value==='admin'?'admin':'trabajador';
   if(!n||!u||!pin)return toast('Nombre, usuario y PIN obligatorios','err');
+  if(!pinValido(pin))return toast('El PIN debe tener al menos 6 dígitos numéricos','err');
   if(state.trabajadores.some(t=>t.usuario===u))return toast('Ese usuario ya existe','err');
-  state.trabajadores.push({id:uid(),nombre:n,usuario:u,pinHash:await hashPin(pin),rol});
+  state.trabajadores.push({id:uid(),nombre:n,usuario:u,pinHash:await crearPinHash(pin),rol});
   $('#nt-nombre').value='';$('#nt-user').value='';$('#nt-pin').value='';
   await persist(true);renderTrabajadores();rellenarLoginUsers();toast('Usuario añadido','ok');
-};
+});
 async function cambiarPin(id){
   const t=trabPorId(id);
   if(!t.id)return;
-  if(t.pinHash){
-    const actual=prompt('PIN actual de '+t.nombre+':');
-    if(actual===null)return;
-    if(await hashPin(actual.trim())!==t.pinHash){toast('PIN actual incorrecto','err');return;}
-  }
-  const nuevo=prompt('Nuevo PIN para '+t.nombre+':');
+  const nuevo=prompt('Nuevo PIN para '+t.nombre+' (mínimo 6 dígitos):');
   if(nuevo===null)return;
-  if(!nuevo.trim()){toast('El PIN no puede estar vacío','err');return;}
+  if(!pinValido(nuevo)){toast('El PIN debe tener al menos 6 dígitos numéricos','err');return;}
   const conf=prompt('Repite el nuevo PIN para '+t.nombre+':');
   if(conf===null)return;
   if(nuevo.trim()!==conf.trim()){toast('Los PIN no coinciden','err');return;}
-  t.pinHash=await hashPin(nuevo.trim());
+  t.pinHash=await crearPinHash(nuevo.trim());
+  delete t.debeCambiarPin;
   await persist(true);renderTrabajadores();rellenarLoginUsers();toast('PIN actualizado','ok');
 }
 async function cambiarRol(id){
   const t=trabPorId(id);
   if(esAdminBase(t))return toast('El usuario admin mantiene siempre permisos de administrador','err');
-  t.rol=t.rol==='admin'?'trabajador':'admin';await persist(true);renderTrabajadores();toast('Rol: '+t.rol,'ok');
+  if(t.rol==='trabajador')t.rol='admin';
+  else if(t.rol==='admin')t.rol='developer';
+  else t.rol='trabajador';
+  await persist(true);renderTrabajadores();toast('Rol: '+t.rol,'ok');
 }
 async function eliminarTrab(id){
   if(esAdminBase(trabPorId(id)))return toast('No puedes eliminar el usuario admin principal','err');
@@ -1036,8 +1489,8 @@ function renderCategorias(){
   c.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editarCat(b.dataset.edit));
   c.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>eliminarCat(b.dataset.del));
 }
-$('#btnAddCat').onclick=async()=>{const n=$('#nc-nombre').value.trim();if(!n)return toast('Escribe una categoría','err');
-  state.categorias.push({id:uid(),nombre:n});$('#nc-nombre').value='';await persist(true);renderCategorias();rellenarSelects();toast('Categoría añadida','ok');};
+$('#btnAddCat').onclick=()=>conCarga('#btnAddCat',async()=>{const n=$('#nc-nombre').value.trim();if(!n)return toast('Escribe una categoría','err');
+  state.categorias.push({id:uid(),nombre:n});$('#nc-nombre').value='';await persist(true);renderCategorias();rellenarSelects();toast('Categoría añadida','ok');});
 async function editarCat(id){const c=state.categorias.find(x=>x.id===id);const n=prompt('Categoría:',c.nombre);if(n&&n.trim()){c.nombre=n.trim();await persist(true);renderCategorias();rellenarSelects();}}
 async function eliminarCat(id){const n=state.partes.filter(p=>p.catId===id).length;
   if(n&&!confirm(`Tiene ${n} partes. ¿Eliminar igualmente?`))return;else if(!n&&!confirm('¿Eliminar categoría?'))return;
@@ -1060,14 +1513,14 @@ function renderOfs(){
   c.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editarOf(b.dataset.edit));
   c.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>eliminarOf(b.dataset.del));
 }
-$('#btnAddOf').onclick=async()=>{
+$('#btnAddOf').onclick=()=>conCarga('#btnAddOf',async()=>{
   const cod=$('#no-cod').value.trim(),desc=$('#no-desc').value.trim(),emp=$('#no-emp').value.trim(),cli=$('#no-cli').value.trim(),dist=$('#no-dist').value.trim();
   const prev=parseFloat(($('#no-prev').value||'').replace(',','.'))||0;
   if(!cod||!desc)return toast('Código y descripción obligatorios','err');
   state.ofs.push({id:uid(),codigo:cod,desc,empresa:emp,cliente:cli,distribuidor:dist,horasPrev:prev});
   ['#no-cod','#no-desc','#no-emp','#no-cli','#no-dist','#no-prev'].forEach(s=>$(s).value='');
   await persist(true);renderOfs();rellenarSelects();toast('OF añadida','ok');
-};
+});
 async function editarOf(id){const o=ofPorId(id);
   const cod=prompt('Código OF:',o.codigo);if(cod===null)return;
   const desc=prompt('Descripción:',o.desc);if(desc===null)return;
@@ -1096,12 +1549,138 @@ $('#btnCsvTodo').onclick=()=>exportarCsv([...state.partes].sort((a,b)=>b.fecha.l
 $('#btnExportJson').onclick=()=>descargar('partes_horas_db_'+hoy()+'.json',JSON.stringify(state,null,2),'application/json');
 $('#btnImportJson').onclick=()=>$('#fileImport').click();
 $('#fileImport').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();
-  r.onload=async()=>{try{if(!confirm('Importar sustituirá los datos actuales. ¿Continuar?'))return;mezclar(JSON.parse(r.result));await persist(true);rellenarLoginUsers();renderTodo();toast('Datos importados','ok');}catch(err){toast('JSON no válido','err');}};
+  r.onload=async()=>{try{if(!confirm('Importar sustituirá los datos actuales. ¿Continuar?'))return;mezclar(JSON.parse(r.result));await asegurarAdminBase();await persist(true);rellenarLoginUsers();renderTodo();toast('Datos importados','ok');}catch(err){toast('JSON no válido','err');}};
   r.readAsText(f);e.target.value='';};
 $('#btnNuevoArch').onclick=guardarGhConfig;
 $('#btnAbrirArch').onclick=async()=>{guardarGhConfig();ultimoAutoRefreshGithub=0;const ok=await refrescarDesdeGithubSiProcede(false);if(!ok)toast('No se pudo cargar desde GitHub','err');actualizarEstadoDb();};
-$('#btnReconectar').onclick=async()=>{guardarGhConfig();ultimoAutoRefreshGithub=0;const ok=await refrescarDesdeGithubSiProcede(true);actualizarEstadoDb();toast(ok?'Conexión GitHub correcta':'No se pudo validar la conexión GitHub',ok?'ok':'err');};
+$('#btnReconectar').onclick=async()=>{
+  guardarGhConfig();
+  ultimoAutoRefreshGithub=0;
+  const okLectura=await refrescarDesdeGithubSiProcede(true);
+  const cfg=ghConfig();
+  const okToken=cfg.token?await validarTokenGithub(true):null;
+  actualizarEstadoDb();
+  if(okToken===false)toast('Conexión de lectura OK, pero el token no es válido para escribir','err');
+  else if(okToken===true)toast('Conexión correcta: lectura y escritura con GitHub funcionan','ok');
+  else toast(okLectura?'Lectura de GitHub correcta (sin token, sin comprobar escritura)':'No se pudo conectar con GitHub',okLectura?'ok':'err');
+};
 $('#btnGuardarAhora').onclick=()=>persist();
+$('#btnForzarLectura').onclick=async()=>{
+  ultimoAutoRefreshGithub=0;
+  const ok=await refrescarDesdeGithubSiProcede(false);
+  if(!ok)toast('No se pudo actualizar desde GitHub','err');
+};
+$('#btnValidarTokenAhora').onclick=async()=>{
+  const ok=await validarTokenGithub(false);
+  actualizarEstadoDb();
+  if(ok===false&&!ghConfig().token)toast('No hay ningún token configurado','err');
+};
+$('#btnLimpiarSyncLog').onclick=()=>{syncLog=[];renderSyncLog();};
+$('#btnQuitarToken').onclick=()=>{
+  if(!confirm('Se eliminará el token de GitHub guardado en este navegador. Seguirás pudiendo leer datos, pero no podrás guardar cambios en la nube hasta que pegues un token de nuevo. ¿Continuar?'))return;
+  $('#ghToken').value='';
+  guardarGhConfig();
+  toast('Token eliminado de este navegador. Recuerda revocarlo también en GitHub si ya no lo necesitas.','ok');
+};
+
+/* ================= HERRAMIENTAS DE BASE DE DATOS (DEVELOPER) ================= */
+$('#btnCargarJsonEditor').onclick=()=>{if(!requireDeveloperAction())return;$('#dbJsonEditor').value=JSON.stringify(state,null,2);toast('BD cargada en el editor','ok');};
+$('#btnValidarJson').onclick=()=>{if(!requireDeveloperAction())return;const txt=$('#dbJsonEditor').value.trim();if(!txt)return toast('El editor está vacío','err');try{JSON.parse(txt);toast('JSON válido ✓','ok');}catch(e){toast('JSON inválido: '+e.message,'err');}};
+$('#btnGuardarJsonEditor').onclick=async()=>{if(!requireDeveloperAction())return;const txt=$('#dbJsonEditor').value.trim();if(!txt)return toast('El editor está vacío','err');try{const obj=JSON.parse(txt);if(!obj.trabajadores||!obj.ofs||!obj.categorias||!obj.partes)return toast('Estructura JSON incompleta. Necesita: trabajadores, ofs, categorias, partes','err');state=obj;await asegurarAdminBase();await persist(true);renderTodo();toast('Base de datos actualizada desde editor','ok');}catch(e){toast('Error: '+e.message,'err');}};
+$('#btnLimpiarPartesAntigos').onclick=async()=>{if(!requireDeveloperAction())return;const hace1ano=new Date();hace1ano.setFullYear(hace1ano.getFullYear()-1);const antes=state.partes.filter(p=>new Date(p.fecha)<hace1ano).length;if(!antes)return toast('No hay partes más antiguos de 1 año','ok');if(!confirm(`¿Borrar ${antes} partes más antiguos de 1 año?`))return;state.partes=state.partes.filter(p=>new Date(p.fecha)>=hace1ano);await persist(true);renderTodo();toast(`Borrados ${antes} partes antiguos`,'ok');};
+$('#btnLimpiarUsersSinPin').onclick=async()=>{if(!requireDeveloperAction())return;const sinPin=state.trabajadores.filter(t=>!t.pinHash&&!esAdminBase(t)).length;if(!sinPin)return toast('No hay usuarios sin PIN','ok');if(!confirm(`¿Borrar ${sinPin} usuarios sin PIN?`))return;state.trabajadores=state.trabajadores.filter(t=>t.pinHash||esAdminBase(t));await persist(true);renderTodo();toast(`Borrados ${sinPin} usuarios`,'ok');};
+$('#btnLimpiarPartesVacios').onclick=async()=>{if(!requireDeveloperAction())return;const vacios=state.partes.filter(p=>!p.horas||!(+p.horas)).length;if(!vacios)return toast('No hay partes vacíos','ok');if(!confirm(`¿Borrar ${vacios} partes sin horas?`))return;state.partes=state.partes.filter(p=>p.horas&&(+p.horas));await persist(true);renderTodo();toast(`Borrados ${vacios} partes`,'ok');};
+$('#btnResetAll').onclick=async()=>{if(!requireDeveloperAction())return;if(!confirm('⚠️ ¿RESETEAR TODO A VALORES DE DEMO? Esta acción NO se puede deshacer.'))return;if(!confirm('SEGUNDA CONFIRMACIÓN: ¿Estás completamente seguro?'))return;if(!estadoInicialDemo)return toast('No hay estado demo disponible','err');state=JSON.parse(JSON.stringify(estadoInicialDemo));await asegurarAdminBase();await persist(true);renderTodo();toast('Base de datos reseteada a demo','ok');};
+$('#btnBuscarEnBd').onclick=()=>{if(!requireDeveloperAction())return;const term=$('#dbSearchTerm').value.trim().toLowerCase();if(!term)return toast('Escribe un término de búsqueda','err');const resultados=[];Object.keys(state).forEach(k=>{const json=JSON.stringify(state[k],null,2);json.split('\n').forEach((l,i)=>{if(l.toLowerCase().includes(term))resultados.push(`${k}[${i}]: ${l.substring(0,100)}`);});});const res=$('#dbSearchResults');if(resultados.length){res.textContent=`Encontradas ${resultados.length} coincidencias:\n\n${resultados.slice(0,50).join('\n')}${resultados.length>50?'\n\n... y '+(resultados.length-50)+' más':''}`;res.style.display='block';toast(`${resultados.length} coincidencias encontradas`,'ok');}else{res.textContent='Sin coincidencias';res.style.display='block';toast('Sin coincidencias','ok');}};
+$('#btnReemplazarEnBd').onclick=async()=>{if(!requireDeveloperAction())return;const find=$('#dbSearchTerm').value.trim();const replace=$('#dbReplaceTerm').value.trim();if(!find)return toast('Escribe un término para buscar','err');if(!confirm(`¿Reemplazar "${find}" por "${replace}" en toda la BD?`))return;const json=JSON.stringify(state);const newJson=json.replaceAll(find,replace);try{state=JSON.parse(newJson);await asegurarAdminBase();await persist(true);renderTodo();toast('Reemplazo completado','ok');}catch(e){toast('Error en el reemplazo: '+e.message,'err');}};
+function actualizarEstadisticasBD(){const horas=state.partes.reduce((s,p)=>s+(+p.horas||0),0);const horasPorTrab={},horasPorOf={},horasPorCat={};state.partes.forEach(p=>{horasPorTrab[p.trabId]=(horasPorTrab[p.trabId]||0)+(+p.horas||0);horasPorOf[p.ofId]=(horasPorOf[p.ofId]||0)+(+p.horas||0);horasPorCat[p.catId]=(horasPorCat[p.catId]||0)+(+p.horas||0);});const topTrab=Object.entries(horasPorTrab).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([id,h])=>`${nombreTrab(id)}: ${numES(h)}h`);const topOf=Object.entries(horasPorOf).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([id,h])=>`${etiquetaOf(id)}: ${numES(h)}h`);const topCat=Object.entries(horasPorCat).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([id,h])=>`${nombreCat(id)}: ${numES(h)}h`);$('#dbStats').textContent=`Usuarios: ${state.trabajadores.length} (${state.trabajadores.filter(t=>t.rol==='admin').length} admin, ${state.trabajadores.filter(t=>t.rol==='developer').length} dev, ${state.trabajadores.filter(t=>t.rol==='trabajador').length} workers)\nSin PIN: ${state.trabajadores.filter(t=>!t.pinHash).length}\nOF/Proyectos: ${state.ofs.length}\nCategorías: ${state.categorias.length}\nPartes registrados: ${state.partes.length}\nHoras totales: ${numES(horas)}h\n\nTop 3 por trabajador:\n  ${topTrab.join('\n  ')}\n\nTop 3 por OF:\n  ${topOf.join('\n  ')}\n\nTop 3 por categoría:\n  ${topCat.join('\n  ')}\n\nTamaño BD: ${(JSON.stringify(state).length/1024).toFixed(2)} KB`;};
+$('#btnRefreshStats').onclick=()=>{if(!requireDeveloperAction())return;actualizarEstadisticasBD();};
+$('#btnCrearBackup').onclick=()=>{if(!requireDeveloperAction())return;const backup={timestamp:new Date().toISOString(),data:JSON.parse(JSON.stringify(state))};const backups=JSON.parse(localStorage.getItem('db_backups')||'[]');backups.unshift(backup);if(backups.length>10)backups.pop();localStorage.setItem('db_backups',JSON.stringify(backups));toast('Backup creado (máx 10 guardados)','ok');mostrarInfoBackups();};
+$('#btnListarBackups').onclick=()=>{if(!requireDeveloperAction())return;mostrarInfoBackups();};
+$('#btnRestaurarBackup').onclick=()=>{if(!requireDeveloperAction())return;mostrarInfoBackups();};
+function mostrarInfoBackups(){const backups=JSON.parse(localStorage.getItem('db_backups')||'[]');if(!backups.length){$('#dbBackupInfo').innerHTML='<div class="muted">Sin backups aún</div>';return;}let html='<div class="muted">Backups guardados (haz clic para restaurar):</div><div style="margin-top:8px">';backups.forEach((b,i)=>{const fecha=new Date(b.timestamp).toLocaleString('es-ES');const size=(JSON.stringify(b.data).length/1024).toFixed(1);html+=`<div style="padding:8px;background:#fff;border:1px solid #ddd;border-radius:4px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;gap:10px">
+    <div style="cursor:pointer;flex:1" data-backup-index="${i}"><b>${fecha}</b> (${size}KB) <span class="muted">[Click para restaurar]</span></div>
+    <button type="button" class="btn btn-ghost btn-sm" data-backup-download="${i}">⬇ Descargar</button>
+  </div>`;});html+='</div>';const info=$('#dbBackupInfo');info.innerHTML=html;info.querySelectorAll('[data-backup-index]').forEach(el=>el.onclick=async()=>{if(!requireDeveloperAction())return;const idx=+el.dataset.backupIndex;const backupsNow=JSON.parse(localStorage.getItem('db_backups')||'[]');if(!backupsNow[idx])return toast('Backup no encontrado','err');const fecha=new Date(backupsNow[idx].timestamp).toLocaleString('es-ES');if(!confirm(`¿Restaurar backup de ${fecha}?`))return;state=JSON.parse(JSON.stringify(backupsNow[idx].data));await asegurarAdminBase();await persist(true);renderTodo();toast('Backup restaurado','ok');});
+  info.querySelectorAll('[data-backup-download]').forEach(el=>el.onclick=()=>{if(!requireDeveloperAction())return;const idx=+el.dataset.backupDownload;const backupsNow=JSON.parse(localStorage.getItem('db_backups')||'[]');if(!backupsNow[idx])return toast('Backup no encontrado','err');descargar('backup_'+backupsNow[idx].timestamp.replace(/[:.]/g,'-')+'.json',JSON.stringify(backupsNow[idx].data,null,2),'application/json');});}
+
+/* ================= DIAGNÓSTICO Y MANTENIMIENTO (DEVELOPER) ================= */
+function validarIntegridad(){
+  const problemas=[];
+  const idsTrab=new Set(state.trabajadores.map(t=>t.id));
+  const idsOf=new Set(state.ofs.map(o=>o.id));
+  const idsCat=new Set(state.categorias.map(c=>c.id));
+  function dupes(arr,label){const vistos=new Set();arr.forEach(x=>{if(vistos.has(x.id))problemas.push(`ID duplicado en ${label}: ${x.id}`);vistos.add(x.id);});}
+  dupes(state.trabajadores,'trabajadores');dupes(state.ofs,'ofs');dupes(state.categorias,'categorías');dupes(state.partes,'partes');
+  state.partes.forEach((p,i)=>{
+    const ref=p.id||('#'+i);
+    if(!p.trabId||!idsTrab.has(p.trabId))problemas.push(`Parte ${ref}: trabajador inexistente (${p.trabId||'vacío'})`);
+    if(!p.ofId||!idsOf.has(p.ofId))problemas.push(`Parte ${ref}: OF inexistente (${p.ofId||'vacío'})`);
+    if(!p.catId||!idsCat.has(p.catId))problemas.push(`Parte ${ref}: categoría inexistente (${p.catId||'vacío'})`);
+    if(!(+p.horas>0))problemas.push(`Parte ${ref}: horas inválidas (${p.horas})`);
+    if(!p.fecha||isNaN(new Date(p.fecha).getTime()))problemas.push(`Parte ${ref}: fecha inválida (${p.fecha||'vacía'})`);
+  });
+  if(!state.trabajadores.some(esAdminBase))problemas.push('No hay usuario admin base — se recreará automáticamente al recargar la app');
+  const sinPin=state.trabajadores.filter(t=>!t.pinHash).length;
+  const res=$('#dbDiagResults');
+  if(problemas.length){res.textContent=`⚠ ${problemas.length} problema(s) encontrado(s):\n\n`+problemas.slice(0,80).join('\n')+(problemas.length>80?`\n\n... y ${problemas.length-80} más`:'');}
+  else{res.textContent='✓ Todo correcto: sin referencias rotas, sin IDs duplicados, sin horas/fechas inválidas.'+(sinPin?`\n\nNota: ${sinPin} usuario(s) sin PIN configurado.`:'');}
+  res.style.display='block';
+  toast(problemas.length?`${problemas.length} problema(s) encontrado(s)`:'Integridad OK','ok');
+}
+$('#btnValidarIntegridad').onclick=()=>{if(!requireDeveloperAction())return;validarIntegridad();};
+$('#btnEstadoGithubApi').onclick=()=>{if(!requireDeveloperAction())return;conCarga('#btnEstadoGithubApi',async()=>{
+  const res=$('#dbDiagResults');
+  try{
+    const cfg=ghConfig();
+    const headers={'Accept':'application/vnd.github+json'};
+    if(cfg.token)headers['Authorization']='Bearer '+cfg.token;
+    const r=await fetch('https://api.github.com/rate_limit',{headers});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const data=await r.json();
+    const core=data.resources.core;
+    const reset=new Date(core.reset*1000).toLocaleTimeString('es-ES');
+    res.textContent=`Peticiones a la API de GitHub (lectura):\nUsadas: ${core.limit-core.remaining} / ${core.limit}\nRestantes: ${core.remaining}\nSe reinicia a las: ${reset}\n\n`+(cfg.token?'Autenticado con token: límite alto (5000/h).':'Sin token: límite bajo (60/h). Añade un token en "Base de datos en la nube" para leer sin restricciones.');
+    res.style.display='block';
+    toast('Estado de GitHub actualizado','ok');
+  }catch(e){res.textContent='No se pudo consultar el estado de la API de GitHub: '+e.message;res.style.display='block';toast('Error al consultar GitHub','err');}
+});};
+$('#btnDiagnosticoEntorno').onclick=()=>{if(!requireDeveloperAction())return;
+  const cfg=ghConfig();
+  let lsSize='?';try{lsSize=(JSON.stringify(localStorage).length/1024).toFixed(1);}catch(e){}
+  const backups=JSON.parse(localStorage.getItem('db_backups')||'[]');
+  const info=[
+    `Usuario / rol: ${sesion?sesion.nombre+' ('+sesion.rol+')':'—'}`,
+    `Almacenamiento localStorage (aprox.): ${lsSize} KB`,
+    `IndexedDB disponible: ${'indexedDB' in window?'sí':'no'}`,
+    `File System Access API: ${FSA?'sí':'no'}${dbHandle?' (archivo local conectado)':''}`,
+    `GitHub: repo=${cfg.repo} · rama=${cfg.branch} · archivo=${cfg.path}`,
+    `Token GitHub configurado: ${cfg.token?'sí':'no'}`,
+    `Estado último guardado en GitHub: ${ghWriteState}`,
+    `Última lectura correcta de GitHub: ${ultimaActualizacionPanel?ultimaActualizacionPanel.toLocaleString('es-ES'):'—'}`,
+    `Último guardado (state.meta.lastSaved): ${state.meta.lastSaved?new Date(state.meta.lastSaved).toLocaleString('es-ES'):'—'}`,
+    `Backups locales guardados: ${backups.length}`,
+    `Navegador: ${navigator.userAgent}`
+  ].join('\n');
+  const res=$('#dbDiagResults');res.textContent=info;res.style.display='block';toast('Diagnóstico generado','ok');
+};
+$('#btnPurgarCache').onclick=()=>{if(!requireDeveloperAction())return;
+  if(!confirm('Esto borra la copia local guardada en este navegador y recarga los datos desde GitHub. ¿Continuar?'))return;
+  conCarga('#btnPurgarCache',async()=>{
+    try{localStorage.removeItem(LS_KEY);}catch(e){}
+    ultimoAutoRefreshGithub=0;
+    const ok=await refrescarDesdeGithubSiProcede(false);
+    if(!ok)toast('No se pudo recargar desde GitHub. Revisa la configuración.','err');
+  });
+};
+$('#btnVaciarBackups').onclick=()=>{if(!requireDeveloperAction())return;
+  const backups=JSON.parse(localStorage.getItem('db_backups')||'[]');
+  if(!backups.length)return toast('No hay backups guardados','ok');
+  if(!confirm(`¿Eliminar los ${backups.length} backup(s) guardados en este navegador? Esta acción no se puede deshacer.`))return;
+  localStorage.removeItem('db_backups');
+  mostrarInfoBackups();
+  toast('Backups eliminados','ok');
+};
 
 /* ================= EDICIÓN DE PARTES ================= */
 function llenarEditSelects(){
@@ -1110,7 +1689,7 @@ function llenarEditSelects(){
 }
 function abrirEditar(id){
   const p=state.partes.find(x=>x.id===id);if(!p)return;
-  if(sesion.rol!=='admin'&&p.trabId!==sesion.id){toast('Solo puedes editar tus partes','err');return;}
+  if(sesion.rol!=='admin'&&sesion.rol!=='developer'&&p.trabId!==sesion.id){toast('Solo puedes editar tus partes','err');return;}
   llenarEditSelects();
   $('#ed-id').value=p.id;$('#ed-of').value=p.ofId;$('#ed-fecha').value=p.fecha;$('#ed-cat').value=p.catId;
   $('#ed-horas').value=numES(p.horas);$('#ed-obs').value=p.obs||'';
@@ -1118,14 +1697,14 @@ function abrirEditar(id){
 }
 $('#ed-cancel').onclick=()=>$('#editOv').classList.remove('show');
 $('#editOv').addEventListener('click',e=>{if(e.target.id==='editOv')$('#editOv').classList.remove('show');});
-$('#ed-save').onclick=async()=>{
+$('#ed-save').onclick=()=>conCarga('#ed-save',async()=>{
   const p=state.partes.find(x=>x.id===$('#ed-id').value);if(!p)return;
   const horas=parseFloat(($('#ed-horas').value||'').replace(',','.'))||0;
   if(!$('#ed-of').value){toast('Selecciona una OF','err');return;}
   if(!(horas>0)){toast('Las horas deben ser mayores que 0','err');return;}
   p.ofId=$('#ed-of').value;p.fecha=$('#ed-fecha').value;p.catId=$('#ed-cat').value;p.horas=horas;p.obs=$('#ed-obs').value.trim();
   await persist(true);$('#editOv').classList.remove('show');renderUltimos();consultar();toast('Parte actualizado','ok');
-};
+});
 
 /* ================= INFORME IMPRIMIBLE (PDF con cajetín) ================= */
 $('#btnInforme').onclick=generarInforme;
@@ -1172,7 +1751,7 @@ function generarInforme(){
 }
 
 /* ================= RENDER GLOBAL ================= */
-function renderTodo(){rellenarSelects();renderUltimos();renderTrabajadores();renderCategorias();renderOfs();consultar();refrescarKpis();actualizarEstadoDb();}
+function renderTodo(){rellenarSelects();renderUltimos();renderTrabajadores();renderCategorias();renderOfs();consultar();refrescarKpis();actualizarEstadoDb();renderSyncStatus();renderActividadUsuarios();}
 
 /* ================= ARRANQUE ================= */
 async function init(){
@@ -1186,16 +1765,30 @@ async function init(){
   if(!cargado)cargado=cargarLocal();
   if(!state.categorias.length)state.categorias=CATS_DEFECTO.map(c=>({id:uid(),nombre:c}));
   // asegurar admin
-  const adminNormalizado=await asegurarAdminBase();
+  const {cambiado:adminNormalizado,pinTemporal}=await asegurarAdminBase();
   const hayAdmin=state.trabajadores.some(t=>t.rol==='admin'&&t.pinHash);
-  if(!hayAdmin){state.trabajadores.push({id:uid(),nombre:'Administrador',usuario:'admin',pinHash:await hashPin('1234'),rol:'admin'});
-    try{localStorage.setItem(LS_KEY,JSON.stringify(state,null,2));}catch(e){}}
+  let pinTemporalFallback=null;
+  if(!hayAdmin){
+    pinTemporalFallback=generarPinTemporal();
+    state.trabajadores.push({id:uid(),nombre:'Administrador',usuario:'admin',pinHash:await crearPinHash(pinTemporalFallback),rol:'admin',debeCambiarPin:true});
+    try{localStorage.setItem(LS_KEY,JSON.stringify(state,null,2));}catch(e){}
+  }
   else if(adminNormalizado){try{localStorage.setItem(LS_KEY,JSON.stringify(state,null,2));}catch(e){}}
+  const pinParaMostrar=pinTemporal||pinTemporalFallback;
+  if(pinParaMostrar)alert('Se ha creado el usuario "admin" con un PIN temporal:\n\n'+pinParaMostrar+'\n\nApúntalo: se te pedirá cambiarlo obligatoriamente al iniciar sesión.');
   if(!state.ofs.length)state.ofs=[{id:uid(),codigo:'OF-EJEMPLO',desc:'Proyecto de ejemplo (bórralo)',empresa:'',cliente:'',distribuidor:'',horasPrev:0}];
-  rellenarSelects();rellenarLoginUsers();actualizarEstadoDb();refrescarKpis();
+  if(!estadoInicialDemo)estadoInicialDemo=JSON.parse(JSON.stringify(state));
+  rellenarSelects();rellenarLoginUsers();aplicarLoginPrefs();actualizarEstadoDb();refrescarKpis();renderSyncStatus();renderActividadUsuarios();
   $('#loginOv').style.display='flex';
+  mostrarInfoBackups();
+  actualizarEstadisticasBD();
+  if(ghConfig().token)validarTokenGithub(true); // valida el token guardado nada más arrancar, sin esperar al primer guardado
   window.addEventListener('focus',()=>{refrescarDesdeGithubSiProcede(true);});
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')refrescarDesdeGithubSiProcede(true);});
+  actualizarBadgeActualizado();
+  setInterval(actualizarBadgeActualizado,1000);
+  setInterval(()=>{if(sesion)refrescarDesdeGithubSiProcede(true);},600000);
+  setInterval(()=>{if(sesion&&ghConfig().token)validarTokenGithub(true);},300000); // revalida el token cada 5 min mientras haya sesión
 }
 init();
 </script>
