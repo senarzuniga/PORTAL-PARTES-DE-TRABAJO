@@ -314,6 +314,42 @@
     </div>
   </div>
 </div>
+<script>
+(function(){
+  var LS_KEY='ingecart_partes_db_v2';
+  var LOGIN_PREFS_KEY='ingecart_login_prefs_v1';
+  function getUsers(){
+    try{
+      var raw=localStorage.getItem(LS_KEY);
+      if(!raw)return [];
+      var db=JSON.parse(raw);
+      if(!db||!Array.isArray(db.trabajadores))return [];
+      return db.trabajadores.filter(function(t){return t&&t.pinHash;});
+    }catch(e){
+      return [];
+    }
+  }
+  function fillLoginUsers(){
+    var sel=document.getElementById('lg-user');
+    if(!sel)return;
+    var users=getUsers();
+    sel.innerHTML=users.length?users.map(function(t){
+      return '<option value="'+String(t.id).replace(/"/g,'&quot;')+'">'+
+        String(t.nombre||'').replace(/</g,'&lt;').replace(/>/g,'&gt;')+
+        ' ('+String(t.usuario||'').replace(/</g,'&lt;').replace(/>/g,'&gt;')+')</option>';
+    }).join(''):'<option value="">(sin usuarios)</option>';
+    try{
+      var pref=JSON.parse(localStorage.getItem(LOGIN_PREFS_KEY)||'{}')||{};
+      if(pref.userId&&users.some(function(u){return u.id===pref.userId;}))sel.value=pref.userId;
+    }catch(e){}
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fillLoginUsers);
+  else fillLoginUsers();
+  window.addEventListener('focus',fillLoginUsers);
+  window.addEventListener('storage',fillLoginUsers);
+  setInterval(fillLoginUsers,2000);
+})();
+</script>
 
 <header class="app">
   <div class="app-bar">
@@ -771,12 +807,43 @@ let state={meta:{version:2,lastSaved:null},trabajadores:[],ofs:[],categorias:[],
 let sesion=null;
 let ultimoAutoRefreshGithub=0;
 let estadoInicialDemo=null;
+let rehidratandoEstado=false;
 function esAdminBase(t){return !!t&&(t.id==='trab-admin'||(t.usuario||'').trim().toLowerCase()==='admin');}
 function esDeveloperSesion(){return !!(sesion&&sesion.rol==='developer');}
 function requireDeveloperAction(){
   if(esDeveloperSesion())return true;
   toast('Acción solo disponible para Developer','err');
   return false;
+}
+function hidratarEstadoDesdePersistencia(){
+  if(rehidratandoEstado)return false;
+  if(Array.isArray(state.trabajadores)&&state.trabajadores.length)return false;
+  try{
+    const raw=localStorage.getItem(LS_KEY);
+    if(!raw)return false;
+    const db=JSON.parse(raw);
+    if(!db||!Array.isArray(db.trabajadores)||!db.trabajadores.length)return false;
+    rehidratandoEstado=true;
+    mezclar(db);
+    return true;
+  }catch(e){
+    return false;
+  }finally{
+    rehidratandoEstado=false;
+  }
+}
+function trabajadorDesdePersistencia(id){
+  const enMemoria=Array.isArray(state.trabajadores)?state.trabajadores.find(t=>t&&t.id===id):null;
+  if(enMemoria)return enMemoria;
+  try{
+    const raw=localStorage.getItem(LS_KEY);
+    if(!raw)return {};
+    const db=JSON.parse(raw);
+    if(!db||!Array.isArray(db.trabajadores))return {};
+    return db.trabajadores.find(t=>t&&t.id===id)||{};
+  }catch(e){
+    return {};
+  }
 }
 async function asegurarAdminBase(){
   let admin=state.trabajadores.find(esAdminBase);
@@ -1125,12 +1192,23 @@ function refrescarKpis(){
 }
 
 /* ================= HELPERS ================= */
-const trabPorId=id=>state.trabajadores.find(t=>t.id===id)||{};
+const trabPorId=id=>{hidratarEstadoDesdePersistencia();return trabajadorDesdePersistencia(id);};
 const nombreTrab=id=>trabPorId(id).nombre||'—';
 const nombreCat=id=>(state.categorias.find(c=>c.id===id)||{}).nombre||'—';
 const ofPorId=id=>state.ofs.find(o=>o.id===id)||{};
 const etiquetaOf=id=>{const o=ofPorId(id);return o.id?(o.codigo+' — '+o.desc):'—';};
 const opcion=(v,t)=>`<option value="${esc(v)}">${esc(t)}</option>`;
+
+function trabajadoresConPin(){
+  const directos=Array.isArray(state&&state.trabajadores)?state.trabajadores.filter(t=>t&&t.pinHash):[];
+  if(directos.length)return directos;
+  try{
+    const db=JSON.parse(localStorage.getItem(LS_KEY)||'null');
+    return Array.isArray(db&&db.trabajadores)?db.trabajadores.filter(t=>t&&t.pinHash):[];
+  }catch(e){
+    return [];
+  }
+}
 
 function rellenarSelects(){
   const cats=state.categorias.map(c=>opcion(c.id,c.nombre)).join('');
@@ -1146,7 +1224,8 @@ function rellenarSelects(){
 /* ================= LOGIN ================= */
 function rellenarLoginUsers(){
   const sel=$('#lg-user');
-  const users=state.trabajadores.filter(t=>t.pinHash);
+  if(!sel)return;
+  const users=trabajadoresConPin();
   sel.innerHTML=users.length?users.map(t=>opcion(t.id,t.nombre+' ('+(t.usuario||'')+')')).join(''):opcion('','(sin usuarios)');
   const pref=leerLoginPrefs();
   if(pref.userId&&users.some(u=>u.id===pref.userId))sel.value=pref.userId;
@@ -1199,7 +1278,8 @@ function limpiarIntentosLogin(id){const all=leerIntentosLogin();delete all[id];g
 
 async function hacerLogin(){
   const id=$('#lg-user').value, pin=$('#lg-pin').value;
-  const t=trabPorId(id);
+  hidratarEstadoDesdePersistencia();
+  const t=trabajadorDesdePersistencia(id);
   const err=$('#lg-err');
   if(!t.id||!t.pinHash){err.textContent='Usuario o PIN incorrecto.';err.classList.add('show');return;}
   const bloqueo=loginBloqueadoSeg(t.id);
@@ -1762,26 +1842,26 @@ $('#ed-save').onclick=()=>conCarga('#ed-save',async()=>{
 /* ================= INFORME IMPRIMIBLE (PDF con cajetín) ================= */
 $('#btnInforme').onclick=generarInforme;
 function construirHtmlInforme({o,of,rango,presup,caj,total,dias,filas,porTrab,catRows,trabRows,detRows}){
-  return `<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><title>Informe de horas ${o?esc(o.codigo):''}</title>
-  <style>@page{size:A4;margin:14mm}*{box-sizing:border-box}body{font-family:"Segoe UI",Arial,sans-serif;color:#161616;font-size:12px;margin:0}
-  .pdf-head{width:100%;border-collapse:collapse;margin-bottom:16px;border:1px solid #d6dadf}
-  .pdf-head td{border:none;padding:0;vertical-align:middle}
-  .pdf-head .title-cell{padding:16px 18px;background:#f7f8f9;border-left:4px solid #E8531B}
-  .pdf-head .eyebrow{font-size:10.5px;text-transform:uppercase;letter-spacing:.7px;color:#5A626B;margin-bottom:3px}
-  .pdf-head h1{font-size:18px;line-height:1.2;margin:0;color:#161616}
-  .pdf-head p{margin:4px 0 0;font-size:11px;color:#5A626B}
-  h2{font-size:13px;border-left:4px solid #E8531B;padding-left:8px;margin:18px 0 8px}
-  table{width:100%;border-collapse:collapse;margin-bottom:6px}td,th{border:1px solid #ccc;padding:5px 8px;text-align:left;font-size:11.5px}
-  th{background:#f2f2f2}.caj td:first-child{background:#faf6f0;font-weight:600;width:38%}.r{text-align:right}
-  .tot{background:#fff1e8;font-weight:800}.kpis{display:flex;gap:10px;margin:10px 0}.kpi{border:1px solid #ccc;border-left:4px solid #E8531B;padding:8px 12px;flex:1}.kpi b{font-size:18px;display:block}
-  .foot{margin-top:16px;border-top:1px solid #ccc;padding-top:8px;font-size:10.5px;color:#666;text-align:center}</style></head><body>
-  <table class="pdf-head" role="presentation"><tr><td class="title-cell"><div class="eyebrow">INGECART · Engineering &amp; Auditing</div><h1>Informe de horas por OF</h1><p>Resumen imprimible de dedicación, categorías y detalle de partes</p></td></tr></table>
-  <h2>Datos del proyecto</h2><table class="caj">${caj}<tr><td>Periodo</td><td>${rango}</td></tr>${presup}<tr><td>Generado</td><td>${new Date().toLocaleString('es-ES')} · por ${esc(sesion?sesion.nombre:'')}</td></tr></table>
-  <div class="kpis"><div class="kpi">Horas totales<b>${numES(total)}</b></div><div class="kpi">Días<b>${dias.length}</b></div><div class="kpi">Partes<b>${filas.length}</b></div><div class="kpi">Trabajadores<b>${Object.keys(porTrab).length}</b></div></div>
-  <h2>Horas por categoría</h2><table><thead><tr><th>Categoría</th><th class="r">Horas</th><th class="r">%</th></tr></thead><tbody>${catRows}<tr class="tot"><td>Total</td><td class="r">${numES(total)}</td><td class="r">100%</td></tr></tbody></table>
-  <h2>Horas por trabajador</h2><table><thead><tr><th>Trabajador</th><th class="r">Horas</th></tr></thead><tbody>${trabRows}</tbody></table>
-  <h2>Detalle de partes (${filas.length})</h2><table><thead><tr><th>Fecha</th><th>Trabajador</th>${of==='__all'?'<th>OF</th>':''}<th>Categoría</th><th class="r">Horas</th><th>Observaciones</th></tr></thead><tbody>${detRows}</tbody></table>
-  <div class="foot">INGECART · Engineering &amp; Auditing — Informe de horas · Documento generado automáticamente</div></body></html>`;
+  const ofHeader = of === '__all' ? '<th>OF</th>' : '';
+  const ofRows = of === '__all' ? '<td>Todas las OF</td>' : '<td>' + esc(of ? of.codigo : '') + '</td>';
+  const presupuesto = presup ? presup : '';
+  return [
+    '<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><title>Informe de horas ' + esc(o ? o.codigo : '') + '</title>',
+    '<style>@page{size:A4;margin:14mm}*{box-sizing:border-box}body{font-family:"Segoe UI",Arial,sans-serif;color:#161616;font-size:12px;margin:0}',
+    '.pdf-head{width:100%;border-collapse:collapse;margin-bottom:16px;border:1px solid #d6dadf}.pdf-head td{border:none;padding:0;vertical-align:middle}',
+    '.pdf-head .title-cell{padding:16px 18px;background:#f7f8f9;border-left:4px solid #E8531B}.pdf-head .eyebrow{font-size:10.5px;text-transform:uppercase;letter-spacing:.7px;color:#5A626B;margin-bottom:3px}',
+    '.pdf-head h1{font-size:18px;line-height:1.2;margin:0;color:#161616}.pdf-head p{margin:4px 0 0;font-size:11px;color:#5A626B}',
+    'h2{font-size:13px;border-left:4px solid #E8531B;padding-left:8px;margin:18px 0 8px}table{width:100%;border-collapse:collapse;margin-bottom:6px}td,th{border:1px solid #ccc;padding:5px 8px;text-align:left;font-size:11.5px}',
+    'th{background:#f2f2f2}.caj td:first-child{background:#faf6f0;font-weight:600;width:38%}.r{text-align:right}.tot{background:#fff1e8;font-weight:800}',
+    '.kpis{display:flex;gap:10px;margin:10px 0}.kpi{border:1px solid #ccc;border-left:4px solid #E8531B;padding:8px 12px;flex:1}.kpi b{font-size:18px;display:block}.foot{margin-top:16px;border-top:1px solid #ccc;padding-top:8px;font-size:10.5px;color:#666;text-align:center}</style></head><body>',
+    '<table class="pdf-head" role="presentation"><tr><td class="title-cell"><div class="eyebrow">INGECART · Engineering &amp; Auditing</div><h1>Informe de horas por OF</h1><p>Resumen imprimible de dedicación, categorías y detalle de partes</p></td></tr></table>',
+    '<h2>Datos del proyecto</h2><table class="caj"><tr><td>OF / Código</td><td>' + esc(o ? o.codigo : '') + '</td></tr><tr><td>Descripción</td><td>' + esc(o ? o.desc : '') + '</td></tr><tr><td>Empresa</td><td>' + esc(o && o.empresa ? o.empresa : '—') + '</td></tr><tr><td>Cliente</td><td>' + esc(o && o.cliente ? o.cliente : '—') + '</td></tr><tr><td>Distribuidor</td><td>' + esc(o && o.distribuidor ? o.distribuidor : '—') + '</td></tr><tr><td>Periodo</td><td>' + esc(rango) + '</td></tr>' + presupuesto + '<tr><td>Generado</td><td>' + new Date().toLocaleString('es-ES') + ' · por ' + esc(sesion ? sesion.nombre : '') + '</td></tr></table>',
+    '<div class="kpis"><div class="kpi">Horas totales<b>' + numES(total) + '</b></div><div class="kpi">Días<b>' + dias.length + '</b></div><div class="kpi">Partes<b>' + filas.length + '</b></div><div class="kpi">Trabajadores<b>' + Object.keys(porTrab).length + '</b></div></div>',
+    '<h2>Horas por categoría</h2><table><thead><tr><th>Categoría</th><th class="r">Horas</th><th class="r">%</th></tr></thead><tbody>' + catRows + '<tr class="tot"><td>Total</td><td class="r">' + numES(total) + '</td><td class="r">100%</td></tr></tbody></table>',
+    '<h2>Horas por trabajador</h2><table><thead><tr><th>Trabajador</th><th class="r">Horas</th></tr></thead><tbody>' + trabRows + '</tbody></table>',
+    '<h2>Detalle de partes (' + filas.length + ')</h2><table><thead><tr><th>Fecha</th><th>Trabajador</th>' + ofHeader + '<th>Categoría</th><th class="r">Horas</th><th>Observaciones</th></tr></thead><tbody>' + detRows + '</tbody></table>',
+    '<div class="foot">INGECART · Engineering &amp; Auditing — Informe de horas · Documento generado automáticamente</div></body></html>'
+  ].join('');
 }
 function generarInforme(){
   const filas=filtrarConsulta();if(!filas.length)return toast('No hay datos para el informe','err');
@@ -1844,6 +1924,7 @@ async function init(){
   setInterval(()=>{if(sesion&&ghConfig().token)validarTokenGithub(true);},300000); // revalida el token cada 5 min mientras haya sesión
 }
 init();
+setTimeout(()=>{try{rellenarLoginUsers();}catch(e){}},250);
 </script>
 </body>
 </html>

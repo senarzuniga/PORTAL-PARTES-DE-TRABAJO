@@ -34,17 +34,7 @@ def get_git_version() -> str:
 
 
 def inject_auto_refresh(html: str) -> str:
-    refresh_script = f"""
-<script>
-setTimeout(function () {{
-  window.location.reload();
-}}, {AUTO_REFRESH_MS});
-</script>
-"""
-    marker = "</body>"
-    if marker in html:
-        return html.replace(marker, refresh_script + marker, 1)
-    return html + refresh_script
+    return html
 
 
 def main() -> None:
