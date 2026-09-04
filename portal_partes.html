@@ -1243,6 +1243,12 @@ function aplicarSesion(){
   const canConfig=admin||dev;
   $$('[data-admin]').forEach(t=>t.classList.toggle('hidden',!canConfig));
   $$('[data-dev]').forEach(t=>t.classList.toggle('hidden',!dev));
+  const cfg=ghConfig();
+  if(cfg.token){
+    ghWriteState='unknown';
+    renderSyncStatus();
+    setTimeout(()=>validarTokenGithub(true),0);
+  }
   // si estaba en pestaña restringida y no tiene permiso, volver a parte
   const act=$('.tab.active');
   if(act&&act.hasAttribute('data-admin')&&!canConfig) irTab('parte');
