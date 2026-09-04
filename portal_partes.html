@@ -434,7 +434,13 @@
           <div class="field"><label>Repositorio GitHub</label><input id="ghRepo" value="senarzuniga/PORTAL-PARTES-DE-TRABAJO" placeholder="usuario/repositorio"></div>
           <div class="field"><label>Rama</label><input id="ghBranch" value="main" placeholder="main"></div>
           <div class="field"><label>Archivo JSON</label><input id="ghPath" value="partes_horas_db.json" placeholder="partes_horas_db.json"></div>
-          <div class="field"><label>Token GitHub (para guardar y para leer sin límite de peticiones)</label><input id="ghToken" type="password" placeholder="ghp_..."></div>
+          <div class="field">
+            <label>Token GitHub (para guardar y para leer sin límite de peticiones)</label>
+            <div class="actions" style="margin-top:0">
+              <input id="ghToken" type="password" placeholder="ghp_..." style="flex:1;min-width:220px">
+              <button class="btn btn-ghost btn-sm" id="btnToggleToken" type="button">Mostrar token</button>
+            </div>
+          </div>
         </div>
         <div class="actions" id="accionesFsa">
           <button class="btn btn-primary" id="btnNuevoArch">Guardar configuración GitHub</button>
@@ -1595,6 +1601,14 @@ $('#btnQuitarToken').onclick=()=>{
   $('#ghToken').value='';
   guardarGhConfig();
   toast('Token eliminado de este navegador. Recuerda revocarlo también en GitHub si ya no lo necesitas.','ok');
+};
+$('#btnToggleToken').onclick=()=>{
+  const input=$('#ghToken');
+  const btn=$('#btnToggleToken');
+  if(!input||!btn)return;
+  const mostrar=input.type==='password';
+  input.type=mostrar?'text':'password';
+  btn.textContent=mostrar?'Ocultar token':'Mostrar token';
 };
 
 /* ================= HERRAMIENTAS DE BASE DE DATOS (DEVELOPER) ================= */
