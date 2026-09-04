@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import subprocess
 from datetime import datetime
 from pathlib import Path
 
@@ -16,6 +17,20 @@ def load_portal_html() -> str:
     if not PORTAL_PATH.exists():
         raise FileNotFoundError(f"No se encuentra {PORTAL_PATH.name}")
     return PORTAL_PATH.read_text(encoding="utf-8")
+
+
+def get_git_version() -> str:
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "--short", "HEAD"],
+            cwd=APP_ROOT,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+        return result.stdout.strip()
+    except Exception:
+        return ""
 
 
 def main() -> None:
@@ -42,7 +57,9 @@ def main() -> None:
         st.caption("La vista se refresca automáticamente cada 30 segundos.")
 
     modified_at = datetime.fromtimestamp(PORTAL_PATH.stat().st_mtime).strftime("%Y-%m-%d %H:%M:%S")
-    st.caption(f"Archivo cargado desde: {PORTAL_PATH.name} · última modificación detectada: {modified_at}")
+    git_version = get_git_version()
+    version_suffix = f" · versión Git: {git_version}" if git_version else ""
+    st.caption(f"Archivo cargado desde: {PORTAL_PATH.name} · última modificación detectada: {modified_at}{version_suffix}")
 
     components.html(
         f"""
