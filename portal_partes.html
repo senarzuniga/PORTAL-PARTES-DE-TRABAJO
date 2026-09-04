@@ -333,6 +333,7 @@
   <div class="tabs-inner" id="tabs">
     <button class="tab active" data-tab="parte">Nuevo parte</button>
     <button class="tab" data-tab="consulta">Consulta por OF</button>
+    <button class="tab" data-tab="nube">Conectar con la nube</button>
     <button class="tab" data-tab="config" data-admin>Configuración</button>
     <button class="tab" data-tab="datos" data-dev>Base de datos</button>
   </div>
@@ -415,6 +416,53 @@
     <div id="consultaResultado"></div>
   </section>
 
+  <!-- ===== CONECTAR CON LA NUBE ===== -->
+  <section class="panel" id="panel-nube">
+    <div class="aviso" id="avisoModo"></div>
+
+    <div class="card">
+      <div class="card-h">Base de datos en la nube (GitHub)</div>
+      <div class="card-b">
+        <p class="muted" style="margin-top:0">Todo se guarda en <code>partes_horas_db.json</code> dentro del repositorio de GitHub. Al entrar, la aplicación intenta leer la última versión publicada.</p>
+        <div class="kpis" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px">
+          <div class="kpi" style="background:#fff;border:1px solid var(--gris-linea);border-left:4px solid var(--naranja);border-radius:5px;padding:12px 14px"><div style="font-size:24px;font-weight:800" id="kTrab">0</div><div class="muted">Usuarios</div></div>
+          <div class="kpi" style="background:#fff;border:1px solid var(--gris-linea);border-left:4px solid var(--naranja);border-radius:5px;padding:12px 14px"><div style="font-size:24px;font-weight:800" id="kOf">0</div><div class="muted">OF / Proyectos</div></div>
+          <div class="kpi" style="background:#fff;border:1px solid var(--gris-linea);border-left:4px solid var(--naranja);border-radius:5px;padding:12px 14px"><div style="font-size:24px;font-weight:800" id="kPartes">0</div><div class="muted">Partes</div></div>
+          <div class="kpi" style="background:#fff;border:1px solid var(--gris-linea);border-left:4px solid var(--naranja);border-radius:5px;padding:12px 14px"><div style="font-size:24px;font-weight:800" id="kHoras">0</div><div class="muted">Horas totales</div></div>
+        </div>
+        <div class="grid g2" style="margin-bottom:14px">
+          <div class="field"><label>Repositorio GitHub</label><input id="ghRepo" value="senarzuniga/PORTAL-PARTES-DE-TRABAJO" placeholder="usuario/repositorio"></div>
+          <div class="field"><label>Rama</label><input id="ghBranch" value="main" placeholder="main"></div>
+          <div class="field"><label>Archivo JSON</label><input id="ghPath" value="partes_horas_db.json" placeholder="partes_horas_db.json"></div>
+          <div class="field"><label>Token GitHub (para guardar y para leer sin límite de peticiones)</label><input id="ghToken" type="password" placeholder="ghp_..."></div>
+        </div>
+        <div class="actions" id="accionesFsa">
+          <button class="btn btn-primary" id="btnNuevoArch">Guardar configuración GitHub</button>
+          <button class="btn btn-dark" id="btnAbrirArch">Recargar desde GitHub</button>
+          <button class="btn btn-ghost" id="btnReconectar">Probar conexión</button>
+          <button class="btn btn-ghost" id="btnGuardarAhora">Guardar ahora</button>
+          <button class="btn btn-danger" id="btnQuitarToken">Quitar token de este navegador</button>
+        </div>
+        <div class="actions" style="margin-top:12px">
+          <button class="btn btn-ghost" id="btnExportJson">Descargar copia (JSON)</button>
+          <button class="btn btn-ghost" id="btnImportJson">Importar JSON…</button>
+          <button class="btn btn-ghost" id="btnCsvTodo">Exportar todo a CSV</button>
+          <input type="file" id="fileImport" accept=".json,application/json" style="display:none">
+        </div>
+        <p class="muted" id="lastSaved" style="margin-bottom:0"></p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-h">Cómo dejarla sincronizada con GitHub</div>
+      <div class="card-b"><div class="aviso info" style="margin:0"><ol>
+        <li>Introduce el repositorio, la rama y el archivo JSON que quieres sincronizar.</li>
+        <li>Para guardar cambios en la nube, pega un <b>token de GitHub</b> con permisos de contenido sobre el repositorio.</li>
+        <li>Pulsa <b>“Guardar configuración GitHub”</b> una vez en ese navegador.</li>
+        <li>Al entrar en otro equipo, la app leerá automáticamente <code>partes_horas_db.json</code> desde GitHub; para escribir necesitarás volver a pegar el token en ese navegador.</li>
+      </ol><p class="muted" style="margin:10px 0 0">La sincronización sigue siendo del tipo “el último que guarda manda”. El token se guarda solo en este navegador.</p></div></div>
+    </div>
+  </section>
+
   <!-- ===== CONFIGURACIÓN ===== -->
   <section class="panel" id="panel-config">
     <div class="aviso info">Define <b>usuarios</b>, <b>OF/proyectos</b> y <b>categorías</b>. Los cambios se guardan solos.</div>
@@ -466,8 +514,6 @@
 
   <!-- ===== BASE DE DATOS ===== -->
   <section class="panel" id="panel-datos">
-    <div class="aviso" id="avisoModo"></div>
-
     <div class="card">
       <div class="card-h">🔄 Estado de sincronización</div>
       <div class="card-b">
@@ -499,38 +545,6 @@
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-h">Base de datos en la nube (GitHub)</div>
-      <div class="card-b">
-        <p class="muted" style="margin-top:0">Todo se guarda en <code>partes_horas_db.json</code> dentro del repositorio de GitHub. Al entrar, la aplicación intenta leer la última versión publicada.</p>
-        <div class="kpis" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px">
-          <div class="kpi" style="background:#fff;border:1px solid var(--gris-linea);border-left:4px solid var(--naranja);border-radius:5px;padding:12px 14px"><div style="font-size:24px;font-weight:800" id="kTrab">0</div><div class="muted">Usuarios</div></div>
-          <div class="kpi" style="background:#fff;border:1px solid var(--gris-linea);border-left:4px solid var(--naranja);border-radius:5px;padding:12px 14px"><div style="font-size:24px;font-weight:800" id="kOf">0</div><div class="muted">OF / Proyectos</div></div>
-          <div class="kpi" style="background:#fff;border:1px solid var(--gris-linea);border-left:4px solid var(--naranja);border-radius:5px;padding:12px 14px"><div style="font-size:24px;font-weight:800" id="kPartes">0</div><div class="muted">Partes</div></div>
-          <div class="kpi" style="background:#fff;border:1px solid var(--gris-linea);border-left:4px solid var(--naranja);border-radius:5px;padding:12px 14px"><div style="font-size:24px;font-weight:800" id="kHoras">0</div><div class="muted">Horas totales</div></div>
-        </div>
-        <div class="grid g2" style="margin-bottom:14px">
-          <div class="field"><label>Repositorio GitHub</label><input id="ghRepo" value="senarzuniga/PORTAL-PARTES-DE-TRABAJO" placeholder="usuario/repositorio"></div>
-          <div class="field"><label>Rama</label><input id="ghBranch" value="main" placeholder="main"></div>
-          <div class="field"><label>Archivo JSON</label><input id="ghPath" value="partes_horas_db.json" placeholder="partes_horas_db.json"></div>
-          <div class="field"><label>Token GitHub (para guardar y para leer sin límite de peticiones)</label><input id="ghToken" type="password" placeholder="ghp_..."></div>
-        </div>
-        <div class="actions" id="accionesFsa">
-          <button class="btn btn-primary" id="btnNuevoArch">Guardar configuración GitHub</button>
-          <button class="btn btn-dark" id="btnAbrirArch">Recargar desde GitHub</button>
-          <button class="btn btn-ghost" id="btnReconectar">Probar conexión</button>
-          <button class="btn btn-ghost" id="btnGuardarAhora">Guardar ahora</button>
-          <button class="btn btn-danger" id="btnQuitarToken">Quitar token de este navegador</button>
-        </div>
-        <div class="actions" style="margin-top:12px">
-          <button class="btn btn-ghost" id="btnExportJson">Descargar copia (JSON)</button>
-          <button class="btn btn-ghost" id="btnImportJson">Importar JSON…</button>
-          <button class="btn btn-ghost" id="btnCsvTodo">Exportar todo a CSV</button>
-          <input type="file" id="fileImport" accept=".json,application/json" style="display:none">
-        </div>
-        <p class="muted" id="lastSaved" style="margin-bottom:0"></p>
-      </div>
-    </div>
     <div class="card">
       <div class="card-h">Cómo dejarla sincronizada con GitHub</div>
       <div class="card-b"><div class="aviso info" style="margin:0"><ol>
