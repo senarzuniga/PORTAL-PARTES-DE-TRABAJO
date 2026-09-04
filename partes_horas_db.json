@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": 3,
-    "lastSaved": "2026-09-04T16:45:48.591Z",
+    "lastSaved": "2026-09-04T16:55:43.002Z",
     "backend": "github-contents-json",
     "repository": "senarzuniga/PORTAL-PARTES-DE-TRABAJO",
     "branch": "main",
@@ -227,6 +227,16 @@
       "horas": 1,
       "obs": "Test prueba comunicacion",
       "creado": "2026-09-04T16:45:48.591Z"
+    },
+    {
+      "id": "mtn73jx6kxm6r",
+      "fecha": "2026-09-04",
+      "trabId": "mtjtcumluqxhk",
+      "ofId": "of-ejemplo",
+      "catId": "cat-04",
+      "horas": 2,
+      "obs": "test",
+      "creado": "2026-09-04T16:55:43.002Z"
     }
   ]
 }
