@@ -876,11 +876,12 @@ function ghConfig(){
   return Object.assign(ghDefaults(),saved);
 }
 function guardarGhConfig(){
+  const actual = ghConfig();
   const cfg={
     repo:($('#ghRepo').value||'').trim()||ghDefaults().repo,
     branch:($('#ghBranch').value||'').trim()||ghDefaults().branch,
     path:($('#ghPath').value||'').trim()||ghDefaults().path,
-    token:($('#ghToken').value||'').trim()
+    token:($('#ghToken').value||'').trim()||actual.token||''
   };
   localStorage.setItem(GH_KEY,JSON.stringify(cfg));
   ghWriteState=cfg.token?'unknown':'missing';
