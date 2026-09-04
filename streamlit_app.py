@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+import os
 import subprocess
 from datetime import datetime
 from pathlib import Path
@@ -37,6 +39,36 @@ def inject_auto_refresh(html: str) -> str:
     return html
 
 
+def get_server_github_token() -> str:
+    token = ""
+    try:
+        token = st.secrets.get("github_token", "")
+    except Exception:
+        token = ""
+    if not token:
+        token = os.environ.get("GITHUB_TOKEN", "")
+    return token.strip()
+
+
+def inject_server_token(html: str) -> str:
+    token = get_server_github_token()
+    if not token:
+        return html
+    bootstrap = (
+        "<script>"
+        "try{"
+        "var key='ingecart_partes_github_v1';"
+        "var cfg=JSON.parse(localStorage.getItem(key)||'{}')||{};"
+        f"cfg.token={json.dumps(token)};localStorage.setItem(key,JSON.stringify(cfg));"
+        "}catch(e){}"
+        "</script>"
+    )
+    marker = "<body>"
+    if marker in html:
+        return html.replace(marker, marker + bootstrap, 1)
+    return bootstrap + html
+
+
 def main() -> None:
     st.set_page_config(
         page_title="Portal de Partes de Horas",
@@ -65,7 +97,7 @@ def main() -> None:
     version_suffix = f" · versión Git: {git_version}" if git_version else ""
     st.caption(f"Archivo cargado desde: {PORTAL_PATH.name} · última modificación detectada: {modified_at}{version_suffix}")
 
-    portal_html = inject_auto_refresh(load_portal_html())
+    portal_html = inject_server_token(inject_auto_refresh(load_portal_html()))
     components.html(portal_html, height=2200, scrolling=True)
 
 

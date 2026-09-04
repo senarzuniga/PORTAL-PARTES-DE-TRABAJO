@@ -1060,7 +1060,12 @@ async function cargarDesdeGithub(silencioso){
   try{
     const headers={'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};
     if(cfg.token)headers['Authorization']='Bearer '+cfg.token;
-    const r=await ghFetch(ghApiUrl(cfg),{headers});
+    let r=await ghFetch(ghApiUrl(cfg),{headers});
+    if((r.status===401||r.status===403) && cfg.token){
+      registrarSync('Lectura',false,'Token de lectura inválido ('+r.status+'); reintentando sin token');
+      const anonHeaders={'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};
+      r=await ghFetch(ghApiUrl(cfg),{headers:anonHeaders});
+    }
     if(r.status===404){registrarSync('Lectura',false,'Archivo no encontrado en el repositorio (404)');return false;}
     if(!r.ok)throw new Error('GitHub devolvió '+r.status);
     const data=await r.json();
@@ -1934,7 +1939,7 @@ async function init(){
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')refrescarDesdeGithubSiProcede(true);});
   actualizarBadgeActualizado();
   setInterval(actualizarBadgeActualizado,1000);
-  setInterval(()=>{if(sesion)refrescarDesdeGithubSiProcede(true);},600000);
+  setInterval(()=>{refrescarDesdeGithubSiProcede(true);},600000);
   setInterval(()=>{if(sesion&&ghConfig().token)validarTokenGithub(true);},300000); // revalida el token cada 5 min mientras haya sesión
 }
 init();

@@ -53,6 +53,8 @@ En la pestaña **Base de datos** del portal:
 4. Pega un token de GitHub con permisos de escritura de contenidos
 5. Pulsa **Guardar configuración GitHub**
 
+Si despliegas en Streamlit Community Cloud, puedes definir `github_token` en `st.secrets` o `GITHUB_TOKEN` como variable de entorno para que el token se aplique igual en todas las PCs.
+
 ## Funcionamiento esperado
 
 - al entrar en la app, se lee `partes_horas_db.json` desde GitHub
@@ -63,7 +65,7 @@ En la pestaña **Base de datos** del portal:
 
 - escribir en el mismo repositorio puede disparar redeploys de Streamlit Cloud
 - la concurrencia sigue siendo de documento único; si dos usuarios editan a la vez puede haber conflicto de versión SHA
-- el token queda guardado solo en el navegador del usuario que lo introduce
+- el token puede quedar guardado en el navegador o venir del secreto del despliegue
 
 ## Validación
 
