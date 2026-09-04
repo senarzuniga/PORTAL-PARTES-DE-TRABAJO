@@ -804,6 +804,25 @@ let ghWriteState='unknown'; // unknown | ok | invalid | missing
 let ultimoGuardadoGithubOk=null; // fecha del último PUT confirmado por GitHub (distinto de state.meta.lastSaved, que se marca aunque falle)
 let hayCambiosSinGuardar=false;
 let syncLog=[]; // registro de intentos de lectura/escritura en esta sesión (no se sincroniza, es solo de este navegador)
+function getStorageScope(){
+  try{
+    if(window.top && window.top.localStorage) return window.top.localStorage;
+  }catch(e){}
+  return window.localStorage;
+}
+function readPersistentJson(key, fallback){
+  try{
+    return JSON.parse(getStorageScope().getItem(key)||'null') || fallback;
+  }catch(e){
+    return fallback;
+  }
+}
+function writePersistentJson(key, value){
+  getStorageScope().setItem(key, JSON.stringify(value));
+}
+function removePersistentItem(key){
+  try{getStorageScope().removeItem(key);}catch(e){}
+}
 function haceTiempo(fecha){
   if(!fecha)return'—';
   const s=Math.max(0,Math.round((Date.now()-fecha.getTime())/1000));
@@ -871,9 +890,7 @@ async function idbGet(k){const db=await idb();return new Promise((res,rej)=>{con
 
 function ghDefaults(){return {repo:'senarzuniga/PORTAL-PARTES-DE-TRABAJO',branch:'main',path:'partes_horas_db.json',token:''};}
 function ghConfig(){
-  let saved={};
-  try{saved=JSON.parse(localStorage.getItem(GH_KEY)||'{}')||{};}catch(e){}
-  return Object.assign(ghDefaults(),saved);
+  return Object.assign(ghDefaults(),readPersistentJson(GH_KEY,{}));
 }
 function guardarGhConfig(){
   const actual = ghConfig();
@@ -883,7 +900,7 @@ function guardarGhConfig(){
     path:($('#ghPath').value||'').trim()||ghDefaults().path,
     token:($('#ghToken').value||'').trim()||actual.token||''
   };
-  localStorage.setItem(GH_KEY,JSON.stringify(cfg));
+  writePersistentJson(GH_KEY,cfg);
   ghWriteState=cfg.token?'unknown':'missing';
   actualizarEstadoDb();renderSyncStatus();
   toast('Configuración GitHub guardada en este navegador','ok');
@@ -1600,6 +1617,7 @@ $('#btnLimpiarSyncLog').onclick=()=>{syncLog=[];renderSyncLog();};
 $('#btnQuitarToken').onclick=()=>{
   if(!confirm('Se eliminará el token de GitHub guardado en este navegador. Seguirás pudiendo leer datos, pero no podrás guardar cambios en la nube hasta que pegues un token de nuevo. ¿Continuar?'))return;
   $('#ghToken').value='';
+  removePersistentItem(GH_KEY);
   guardarGhConfig();
   toast('Token eliminado de este navegador. Recuerda revocarlo también en GitHub si ya no lo necesitas.','ok');
 };
