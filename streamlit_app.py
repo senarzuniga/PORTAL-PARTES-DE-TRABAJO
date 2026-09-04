@@ -33,6 +33,20 @@ def get_git_version() -> str:
         return ""
 
 
+def inject_auto_refresh(html: str) -> str:
+    refresh_script = f"""
+<script>
+setTimeout(function () {{
+  window.location.reload();
+}}, {AUTO_REFRESH_MS});
+</script>
+"""
+    marker = "</body>"
+    if marker in html:
+        return html.replace(marker, refresh_script + marker, 1)
+    return html + refresh_script
+
+
 def main() -> None:
     st.set_page_config(
         page_title="Portal de Partes de Horas",
@@ -61,18 +75,8 @@ def main() -> None:
     version_suffix = f" · versión Git: {git_version}" if git_version else ""
     st.caption(f"Archivo cargado desde: {PORTAL_PATH.name} · última modificación detectada: {modified_at}{version_suffix}")
 
-    components.html(
-        f"""
-        <script>
-        setTimeout(function () {{
-          window.parent.location.reload();
-        }}, {AUTO_REFRESH_MS});
-        </script>
-        """,
-        height=0,
-    )
-
-    components.html(load_portal_html(), height=2200, scrolling=True)
+    portal_html = inject_auto_refresh(load_portal_html())
+    components.html(portal_html, height=2200, scrolling=True)
 
 
 if __name__ == "__main__":
