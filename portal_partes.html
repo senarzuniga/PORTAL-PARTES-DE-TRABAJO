@@ -333,6 +333,7 @@
     var sel=document.getElementById('lg-user');
     if(!sel)return;
     var users=getUsers();
+    var current=sel.value;
     sel.innerHTML=users.length?users.map(function(t){
       return '<option value="'+String(t.id).replace(/"/g,'&quot;')+'">'+
         String(t.nombre||'').replace(/</g,'&lt;').replace(/>/g,'&gt;')+
@@ -340,14 +341,16 @@
     }).join(''):'<option value="">(sin usuarios)</option>';
     try{
       var pref=JSON.parse(localStorage.getItem(LOGIN_PREFS_KEY)||'{}')||{};
-      if(pref.userId&&users.some(function(u){return u.id===pref.userId;}))sel.value=pref.userId;
+      if(current&&users.some(function(u){return u.id===current;}))sel.value=current;
+      else if(pref.userId&&users.some(function(u){return u.id===pref.userId;}))sel.value=pref.userId;
+      else if(pref.lastUserId&&users.some(function(u){return u.id===pref.lastUserId;}))sel.value=pref.lastUserId;
+      else if(users.length)sel.value='';
     }catch(e){}
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fillLoginUsers);
   else fillLoginUsers();
   window.addEventListener('focus',fillLoginUsers);
   window.addEventListener('storage',fillLoginUsers);
-  setInterval(fillLoginUsers,2000);
 })();
 </script>
 
@@ -1226,17 +1229,25 @@ function rellenarLoginUsers(){
   const sel=$('#lg-user');
   if(!sel)return;
   const users=trabajadoresConPin();
-  sel.innerHTML=users.length?users.map(t=>opcion(t.id,t.nombre+' ('+(t.usuario||'')+')')).join(''):opcion('','(sin usuarios)');
+  const current=sel.value;
+  sel.innerHTML=users.length?('<option value="">(elige usuario)</option>'+users.map(t=>opcion(t.id,t.nombre+' ('+(t.usuario||'')+')')).join('')):opcion('','(sin usuarios)');
   const pref=leerLoginPrefs();
-  if(pref.userId&&users.some(u=>u.id===pref.userId))sel.value=pref.userId;
+  if(current&&users.some(u=>u.id===current))sel.value=current;
+  else if(pref.userId&&users.some(u=>u.id===pref.userId))sel.value=pref.userId;
+  else if(pref.lastUserId&&users.some(u=>u.id===pref.lastUserId))sel.value=pref.lastUserId;
+  else if(users.length)sel.value='';
 }
 function leerLoginPrefs(){try{return JSON.parse(localStorage.getItem(LOGIN_PREFS_KEY)||'{}')||{};}catch(e){return {};}}
 function guardarLoginPrefs(){
   const pref={};
+  pref.lastUserId=$('#lg-user').value||'';
   if($('#lg-remember-user').checked)pref.userId=$('#lg-user').value||'';
   if($('#lg-remember-pin').checked){
     pref.pin=$('#lg-pin').value||'';
     pref.rememberPin=true;
+  }else{
+    delete pref.pin;
+    delete pref.rememberPin;
   }
   localStorage.setItem(LOGIN_PREFS_KEY,JSON.stringify(pref));
 }
@@ -1244,6 +1255,9 @@ function aplicarLoginPrefs(){
   const pref=leerLoginPrefs();
   $('#lg-remember-user').checked=!!pref.userId;
   $('#lg-remember-pin').checked=!!pref.rememberPin;
+  const sel=$('#lg-user');
+  const target=pref.userId||pref.lastUserId||'';
+  if(sel&&target&&Array.from(sel.options).some(o=>o.value===target))sel.value=target;
   if(pref.rememberPin&&pref.pin)$('#lg-pin').value=pref.pin;
 }
 $('#btnLogin').onclick=hacerLogin;
